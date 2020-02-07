@@ -1,8 +1,10 @@
 package com.iti.chat.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Comparable<User>, Serializable {
     private String firstName;
     private String lastName;
     private int id;
@@ -10,16 +12,23 @@ public class User {
     private String phone;
     private int status;
     private int gender;
+    private String country;
     private List<User> friends;
     private List<ChatRoom> chatRooms;
 
-    public User (String firstName, String lastName, String phone, String email, int status, int gender) {
+    {
+        friends = new ArrayList<>();
+        chatRooms = new ArrayList<>();
+    }
+
+    public User (String firstName, String lastName, String phone, String email, int gender, String country){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
-        this.status = status;
+        this.status = UserStatus.ONLINE;
         this.gender = gender;
+        this.country = country;
     }
 
     public User() {
@@ -114,6 +123,14 @@ public class User {
         this.phone = phone;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public List<User> getFriends() {
         return friends;
     }
@@ -139,6 +156,10 @@ public class User {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return id;
+    }
 
     @Override
     public String toString() {
@@ -150,5 +171,10 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", status='" + getStatus() + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return firstName.compareTo(o.firstName);
     }
 }

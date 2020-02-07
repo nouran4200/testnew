@@ -8,6 +8,18 @@ import java.sql.*;
 import java.util.List;
 
 public class FriendRequestDAOImpl implements FriendRequestDAO {
+    private static FriendRequestDAOImpl instance;
+
+    private FriendRequestDAOImpl() {
+
+    }
+
+    public static FriendRequestDAOImpl getInstance() {
+        if(instance == null) {
+            instance = new FriendRequestDAOImpl();
+        }
+        return instance;
+    }
     @Override
     public void sendFriendRequest(User sender, User receiver) {
         List<User> pendingFriends = pendingFriendRequests(sender);
@@ -38,6 +50,8 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
             statement.setInt(1, sender.getId());
             statement.setInt(2, receiver.getId());
             statement.execute();
+            sender.getFriends().add(receiver);
+            receiver.getFriends().add(sender);
             DBConnection.getInstance().closeConnection(connection);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,7 +92,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
 
     @Override
     public List<User> getFriends(User user) {
-        Connection connection = null;
+        Connection connection ;
         String query1 = "select u2.* from friend_requests fr, users u1, users u2 where " +
                 "u1.user_id = fr.sender_id and fr.status = 1 and fr.receiver_id = u2.user_id" +
                 " and u2.user_id <> u1.user_id and u1.user_id = " + user.getId();

@@ -1,4 +1,5 @@
 package com.iti.chat.util.adapter;
+
 import com.iti.chat.model.User;
 
 import java.sql.ResultSet;
@@ -14,14 +15,16 @@ public class UserAdapter {
             String email = resultSet.getString("email");
             String phone = resultSet.getString("phone");
             int id = resultSet.getInt("user_id");
-            int status = resultSet.getInt("user_status");
+            int gender = resultSet.getInt("gender");
+            String country = resultSet.getString("country");
             User user = new User();
-            user.setStatus(status);
+            user.setCountry(country);
             user.setEmail(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setPhone(phone);
             user.setId(id);
+            user.setGender(gender);
             return user;
         }
         return null;

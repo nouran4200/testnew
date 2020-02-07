@@ -6,15 +6,16 @@ import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChatRoomServiceProvider implements ChatRoomService{
+public class ChatRoomServiceProvider extends UnicastRemoteObject implements ChatRoomService{
     private static ChatRoomServiceProvider instance;
-    private ChatRoomServiceProvider() {
+    private ChatRoomServiceProvider() throws RemoteException{
 
     }
-    public static ChatRoomServiceProvider getInstance() {
+    public static ChatRoomServiceProvider getInstance() throws RemoteException {
         if(instance == null) {
             instance = new ChatRoomServiceProvider();
         }
@@ -32,12 +33,12 @@ public class ChatRoomServiceProvider implements ChatRoomService{
     }
 
     @Override
-    public void sendMessage(Message message, ChatRoom room) {
+    public void sendMessage(Message message, ChatRoom room) throws RemoteException {
         room.getMessages().add(message);
         broadcast(message, room);
     }
 
-    public void broadcast(Message message, ChatRoom room) {
+    public void broadcast(Message message, ChatRoom room) throws RemoteException {
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         room.getUsers().parallelStream().filter(user -> !(user.getStatus() == UserStatus.OFFLINE))
             .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {

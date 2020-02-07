@@ -8,8 +8,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface ClientService extends Remote {
-    User login(String phone, String password) throws RemoteException;
-    void logout() throws RemoteException;
+    User getUser() throws RemoteException;
+    void setUser(User user) throws RemoteException;
     void sendMessage(Message message, ChatRoom chatRoom) throws RemoteException;
     void receiveMessage(Message message, ChatRoom chatRoom) throws RemoteException;
 }
