@@ -1,6 +1,8 @@
 package com.iti.chat.model;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable{
     private String content;
     private int messageType;
     private User sender;

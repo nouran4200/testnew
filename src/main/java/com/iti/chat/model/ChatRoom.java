@@ -1,8 +1,9 @@
 package com.iti.chat.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ChatRoom {
+public class ChatRoom implements Serializable{
     private int id;
     private List<User> users;
     private List<Message> messages;
