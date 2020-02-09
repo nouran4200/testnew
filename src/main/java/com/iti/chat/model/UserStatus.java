@@ -1,6 +1,8 @@
 package com.iti.chat.model;
 
-public class UserStatus {
+import java.io.Serializable;
+
+public class UserStatus implements Serializable{
     public static final int OFFLINE = 0;
     public static final int BUSY = 1;
     public static final int AWAY = 2;

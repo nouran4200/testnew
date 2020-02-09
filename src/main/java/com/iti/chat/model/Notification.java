@@ -1,6 +1,8 @@
 package com.iti.chat.model;
 
-public class Notification {
+import java.io.Serializable;
+
+public class Notification implements Serializable{
     public User source;
     public User receiver;
     public int notificationType;

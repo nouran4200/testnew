@@ -16,6 +16,7 @@ public class Server {
             registry.rebind("chatRoomService", chatRoomService);
             registry.rebind("sessionService", sessionService);
             registry.rebind("friendRequestsService", friendRequestsService);
+            System.out.println("server running");
         } catch (RemoteException e) {
             e.printStackTrace();
         }

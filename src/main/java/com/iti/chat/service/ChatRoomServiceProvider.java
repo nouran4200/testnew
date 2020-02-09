@@ -34,9 +34,15 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     @Override
     public void sendMessage(Message message, ChatRoom room) throws RemoteException {
+<<<<<<< HEAD
         room.getMessages().add(message);
         message.setChatRoom(room);
         broadcast(message, room);
+=======
+        //room.getMessages().add(message);
+        //broadcast(message, room);
+        System.out.println("msg sent");
+>>>>>>> bbffb61967bebec2709d5d5d966043410e11014d
     }
 
     public void broadcast(Message message, ChatRoom room) throws RemoteException {
