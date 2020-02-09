@@ -35,6 +35,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     @Override
     public void sendMessage(Message message, ChatRoom room) throws RemoteException {
         room.getMessages().add(message);
+        message.setChatRoom(room);
         broadcast(message, room);
     }
 
@@ -43,7 +44,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         room.getUsers().parallelStream().filter(user -> !(user.getStatus() == UserStatus.OFFLINE))
             .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
             try {
-                client.receiveMessage(message, room);
+                client.receiveMessage(message);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
