@@ -2,12 +2,9 @@ package com.iti.chat.model;
 
 import java.io.Serializable;
 
-<<<<<<< HEAD
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
-=======
-public class Message implements Serializable{
->>>>>>> bbffb61967bebec2709d5d5d966043410e11014d
+
     private String content;
     private int messageType;
     private User sender;
