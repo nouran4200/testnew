@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatRoom implements Serializable{
+public class ChatRoom implements Serializable {
     private int id;
     private List<User> users;
     private List<Message> messages;
