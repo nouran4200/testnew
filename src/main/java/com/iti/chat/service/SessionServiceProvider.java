@@ -48,4 +48,9 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         managedSessions.remove(user);
     }
 
+    public void register(User user, String password) throws SQLException, RemoteException {
+        UserDAO userDAO = UserDAOImpl.getInstance();
+        userDAO.register(user, password);
+    }
+
 }

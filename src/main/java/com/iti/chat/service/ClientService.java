@@ -5,13 +5,14 @@ import com.iti.chat.model.Message;
 import com.iti.chat.model.Notification;
 import com.iti.chat.model.User;
 
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface ClientService extends Remote {
     User getUser() throws RemoteException;
     void setUser(User user) throws RemoteException;
-    void sendMessage(Message message, ChatRoom room) throws RemoteException;
+    void sendMessage(Message message, ChatRoom room) throws RemoteException, NotBoundException;
     void receiveMessage(Message message) throws RemoteException;
     void receiveNotification(Notification notification) throws RemoteException;
 }
