@@ -19,6 +19,7 @@ public class User implements Comparable<User>, Serializable {
     {
         friends = new ArrayList<>();
         chatRooms = new ArrayList<>();
+        country = "Egypt";
     }
 
     public User (String firstName, String lastName, String phone, String email, int gender, String country){

@@ -18,7 +18,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public static UserDAOImpl getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new UserDAOImpl();
         }
         return instance;
@@ -37,10 +37,28 @@ public class UserDAOImpl implements UserDAO {
             List<User> users = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return users;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @Override
+    public void updateInfo(User user) {
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String updateQuery = "UPDATE chatty.users " +
+                    "SET first_name = '" + user.getFirstName() + "', last_name = '" + user.getLastName()
+                    + "' , phone = '" + user.getPhone() + "', email = '" + user.getPhone() +
+                    "' where user_id = " + user.getId();
+            //System.out.println(updateQuery);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(updateQuery);
+            DBConnection.getInstance().closeConnection(connection);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
         }
     }
 
@@ -53,14 +71,12 @@ public class UserDAOImpl implements UserDAO {
             User user = UserAdapter.createUser(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return user;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
 
     }
-
 
 
     public User login(String phone, String password) throws SQLException {
@@ -72,7 +88,7 @@ public class UserDAOImpl implements UserDAO {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         User user = UserAdapter.createUser(resultSet);
-        if(user != null) {
+        if (user != null) {
             FriendRequestDAO friendRequestDAO = FriendRequestDAOImpl.getInstance();
             user.setFriends(friendRequestDAO.getFriends(user));
         }
@@ -81,8 +97,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User register(User user, String password) throws SQLException{
-        if(findUserByPhone(user.getPhone()) == null) {
+    public User register(User user, String password) throws SQLException {
+        if (findUserByPhone(user.getPhone()) == null) {
             String query = "insert into users (first_name, last_name, email, password, phone, gender, country)" +
                     " values (?, ?, ?, ?, ?, ?, ?)";
             try {
@@ -105,8 +121,7 @@ public class UserDAOImpl implements UserDAO {
                 e.printStackTrace();
             }
             return null;
-        }
-        else {
+        } else {
             throw new DuplicatePhoneException("phone is already used");
         }
     }
