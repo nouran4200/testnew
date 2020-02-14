@@ -7,7 +7,8 @@ module ChatServer {
     requires mysql.connector.java;
     requires rmiio;
     requires chatter.bot.api;
+    requires com.jfoenix;
     opens com.main;
-    exports com.iti.chat.controller to javafx.fxml;
+    opens com.iti.chat.controller to javafx.fxml;
     exports com.iti.chat.service to java.rmi;
 }
