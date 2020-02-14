@@ -3,6 +3,7 @@ package com.iti.chat.service;
 import com.iti.chat.dao.UserDAO;
 import com.iti.chat.dao.UserDAOImpl;
 import com.iti.chat.model.User;
+import com.iti.chat.model.UserStatus;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -49,6 +50,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         User user = userDAO.login(phone, password);
         if(user != null) {
             managedSessions.put(user, client);
+            user.setStatus(UserStatus.ONLINE);
             client.setUser(user);
         }
         return user;
@@ -56,8 +58,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public void logout(User user) {
-
         managedSessions.remove(user);
+        user.setStatus(UserStatus.OFFLINE);
     }
 
     public void register(User user, String password) throws SQLException, RemoteException {

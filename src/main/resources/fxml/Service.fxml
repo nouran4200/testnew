@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="279.0" prefWidth="457.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <ImageView fitHeight="57.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="60.0" right="10.0" top="15.0" />
+               </HBox.margin>
+               <image>
+                  <Image url="@../../../../../../" />
+               </image>
+            </ImageView>
+            <Label prefHeight="33.0" prefWidth="85.0" text="Online">
+               <HBox.margin>
+                  <Insets left="30.0" top="30.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <VBox.margin>
+            <Insets top="40.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="50.0" prefHeight="100.0" prefWidth="200.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <ImageView fitHeight="57.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="60.0" right="10.0" top="15.0" />
+               </HBox.margin>
+               <image>
+                  <Image url="@../../../../../../" />
+               </image>
+            </ImageView>
+            <Label prefHeight="33.0" prefWidth="85.0" text="Offline">
+               <HBox.margin>
+                  <Insets left="30.0" top="30.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</VBox>

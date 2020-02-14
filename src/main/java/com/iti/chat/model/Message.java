@@ -9,8 +9,10 @@ public class Message implements Serializable {
     private User sender;
     private String remotePath;
     private ChatRoom chatRoom;
+    private MessageStyle style;
 
     public Message() {
+
         messageType = MessageType.TEXT_MESSAGE;
     }
 

@@ -18,11 +18,13 @@ public class User implements Comparable<User>, Serializable {
     private String password;
     private List<User> friends;
     private List<ChatRoom> chatRooms;
+    private boolean chatBotEnabled;
 
     {
         friends = new ArrayList<>();
         chatRooms = new ArrayList<>();
         country = "Egypt";
+        status = UserStatus.OFFLINE;
     }
 
     public User (String firstName, String lastName, String phone, String email, int gender, String country){
@@ -36,8 +38,15 @@ public class User implements Comparable<User>, Serializable {
     }
 
     public User() {
-        gender = Gender.MALE;
-        status = UserStatus.ONLINE;
+
+    }
+
+    public boolean isChatBotEnabled() {
+        return chatBotEnabled;
+    }
+
+    public void setChatBotEnabled(boolean chatBotEnabled) {
+        this.chatBotEnabled = chatBotEnabled;
     }
 
     public int getGender() {
@@ -135,6 +144,7 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
+
     public String getBio(){
         return bio;
     }
@@ -143,11 +153,13 @@ public class User implements Comparable<User>, Serializable {
         this.bio = bio;
     }
 
+
     public String getPassword(){return password;}
 
     public void setPassword(String password){
         this.password = password;
     }
+
 
     public List<User> getFriends() {
         return friends;
