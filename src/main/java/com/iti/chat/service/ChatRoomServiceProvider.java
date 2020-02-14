@@ -63,7 +63,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         InputStream fileData = RemoteInputStreamClient.wrap(remoteInputStream);
         ReadableByteChannel from = Channels.newChannel(fileData);
         ByteBuffer buffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-        WritableByteChannel to = FileChannel.open(Paths.get("/Users/Hossiny/Desktop/test"), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
+        String path = "uploaded files/" + message.getContent();
+        System.out.println("saving at " + path);
+        WritableByteChannel to = FileChannel.open(Paths.get(path), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
         while (from.read(buffer) != -1)
         {
             buffer.flip();
