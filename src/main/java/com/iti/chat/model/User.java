@@ -1,5 +1,6 @@
 package com.iti.chat.model;
 
+import javax.xml.transform.sax.SAXResult;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class User implements Comparable<User>, Serializable {
     private int gender;
     private String country;
     private String bio;
+    private String password;
     private List<User> friends;
     private List<ChatRoom> chatRooms;
 
@@ -139,6 +141,12 @@ public class User implements Comparable<User>, Serializable {
 
     public void setBio(String bio){
         this.bio = bio;
+    }
+
+    public String getPassword(){return password;}
+
+    public void setPassword(String password){
+        this.password = password;
     }
 
     public List<User> getFriends() {

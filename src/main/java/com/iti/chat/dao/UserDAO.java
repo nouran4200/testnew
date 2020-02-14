@@ -10,5 +10,6 @@ public interface UserDAO {
     public User findUserByPhone(String phone) throws SQLException;
     public User register(User user, String password) throws SQLException;
     public List<User> searchByName(String searchQuery) throws SQLException;
-    void updateInfo(User user);
+    public void updateInfo(User user) throws SQLException;
+    public void updateUserPassword(User user) throws SQLException;
 }

@@ -12,4 +12,5 @@ public interface SessionService extends Remote {
     void register(User user, String password) throws RemoteException, SQLException;
     ClientService getClient(User user) throws RemoteException;
     void updateInfo(User user) throws RemoteException;
+    void updateUserPassword(User user) throws RemoteException;
 }
