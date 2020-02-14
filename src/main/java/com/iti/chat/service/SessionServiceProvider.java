@@ -35,13 +35,21 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     @Override
     public void updateInfo(User user) {
         UserDAO userDAO = UserDAOImpl.getInstance();
-        userDAO.updateInfo(user);
+        try {
+            userDAO.updateInfo(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void updateUserPassword(User user) throws RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
-        userDAO.updateUserPassword(user);
+        try {
+            userDAO.updateUserPassword(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
