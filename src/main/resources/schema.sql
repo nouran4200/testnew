@@ -8,7 +8,8 @@ CREATE TABLE users(
     gender int not null,
     country varchar(20) not null default 'Egypt',
     password varchar(30) not null,
-	phone varchar(15) unique not null
+	phone varchar(15) unique not null,
+	bio varchar(250)
 );
 
 CREATE TABLE friend_requests(

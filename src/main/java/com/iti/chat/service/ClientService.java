@@ -8,6 +8,7 @@ import com.iti.chat.model.User;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.sql.SQLException;
 
 public interface ClientService extends Remote {
     User getUser() throws RemoteException;
@@ -15,4 +16,5 @@ public interface ClientService extends Remote {
     void sendMessage(Message message, ChatRoom room) throws RemoteException, NotBoundException;
     void receiveMessage(Message message) throws RemoteException;
     void receiveNotification(Notification notification) throws RemoteException;
+    void updateUserInfo(User user) throws RemoteException, SQLException;
 }

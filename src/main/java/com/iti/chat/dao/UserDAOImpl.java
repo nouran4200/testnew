@@ -50,10 +50,12 @@ public class UserDAOImpl implements UserDAO {
             String updateQuery = "UPDATE chatty.users " +
                     "SET first_name = '" + user.getFirstName() + "', last_name = '" + user.getLastName()
                     + "' , phone = '" + user.getPhone() + "', email = '" + user.getPhone() +
+                    "', country = '" + user.getCountry() +
                     "' where user_id = " + user.getId();
             //System.out.println(updateQuery);
             Statement statement = connection.createStatement();
-            statement.executeUpdate(updateQuery);
+            statement.execute(updateQuery);
+            //statement.executeUpdate(updateQuery);
             DBConnection.getInstance().closeConnection(connection);
 
         } catch (SQLException e) {
