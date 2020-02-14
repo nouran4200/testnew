@@ -133,6 +133,7 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
+
     public String getBio(){
         return bio;
     }
@@ -140,6 +141,7 @@ public class User implements Comparable<User>, Serializable {
     public void setBio(String bio){
         this.bio = bio;
     }
+
 
     public List<User> getFriends() {
         return friends;
