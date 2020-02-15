@@ -5,23 +5,13 @@ import com.google.code.chatterbotapi.ChatterBotFactory;
 import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
-import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.iti.chat.model.ChatRoom;
 import com.iti.chat.model.Message;
 import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
+import com.iti.chat.util.FileTransfer;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -63,33 +53,14 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     @Override
     public void sendFile(Message message, RemoteInputStream remoteInputStream) throws IOException {
-        InputStream fileData = RemoteInputStreamClient.wrap(remoteInputStream);
-        ReadableByteChannel from = Channels.newChannel(fileData);
-        ByteBuffer buffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-        File rootPath = new File("uploaded files");
-        if(!rootPath.exists()) {
-            Files.createDirectories(rootPath.toPath());
-        }
-        String uuid = UUID.randomUUID().toString();
-        String path = "uploaded files/" + uuid + message.getContent();
-        WritableByteChannel to = FileChannel.open(Paths.get(path), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
-        int bytes = 0;
-        long totalBytes = 0;
-        while ((bytes = from.read(buffer)) != -1)
-        {
-            totalBytes += bytes;
-            SessionServiceProvider.getInstance().getClient(message.getSender()).didSendNBytes(totalBytes);
-            buffer.flip();
-            while (buffer.hasRemaining()) {
-                to.write(buffer);
-            }
-            buffer.clear();
-        }
-        from.close();
-        to.close();
-        fileData.close();
+        String token = UUID.randomUUID().toString();
+        FileTransfer.save(token + message.getContent(), remoteInputStream);
 
         // set message remotePath
+    }
+
+    public void getFile(String path, ClientService clientService) throws IOException {
+        FileTransfer.get(path, clientService);
     }
 
     private void sendAutomatedMessages(ChatRoom room, Message lastMessage) {

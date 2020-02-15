@@ -1,14 +1,10 @@
 package com.main;
 
-import com.iti.chat.service.*;
-
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.sql.SQLException;
 
 public class Server {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         new Server();
         Main.main(args);
     }
