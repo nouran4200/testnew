@@ -5,24 +5,24 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="163.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="163.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AdminbarController">
    <children>
       <JFXButton fx:id="serviceButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Service" textFill="WHITE">
          <VBox.margin>
             <Insets left="10.0" top="15.0" />
          </VBox.margin>
       </JFXButton>
-      <JFXButton fx:id="serviceButton1" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Stastictics" textFill="WHITE">
+      <JFXButton fx:id="StatsButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Stastictics" textFill="WHITE">
          <VBox.margin>
             <Insets left="10.0" top="15.0" />
          </VBox.margin>
       </JFXButton>
-      <JFXButton fx:id="serviceButton11" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Announcment" textFill="WHITE">
+      <JFXButton fx:id="announcButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Announcment" textFill="WHITE">
          <VBox.margin>
             <Insets left="10.0" top="15.0" />
          </VBox.margin>
       </JFXButton>
-      <JFXButton fx:id="serviceButton111" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Add Contact" textFill="WHITE">
+      <JFXButton fx:id="addContactButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Add Contact" textFill="WHITE">
          <VBox.margin>
             <Insets left="10.0" top="15.0" />
          </VBox.margin>
