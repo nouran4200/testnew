@@ -5,10 +5,11 @@ import com.iti.chat.service.*;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
+ 
 public class Server {
     public Server() {
         try {
+            
             Registry registry = LocateRegistry.createRegistry(4000);
             ChatRoomService chatRoomService = ChatRoomServiceProvider.getInstance();
             SessionService sessionService = SessionServiceProvider.getInstance();
@@ -23,6 +24,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        new Server();
+        //new Server();
+        Main.main(args);
     }
 }
