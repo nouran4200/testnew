@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static final String user = "root";
-    private static final String password = "password";
+    private static final String password = "1234";
     private static final String url = "jdbc:mysql://localhost:3306/chatty";
     private MysqlDataSource dataSource;
     private static DBConnection dbConnection;

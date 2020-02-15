@@ -3,7 +3,10 @@ package com.iti.chat.controller;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,35 +19,47 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
+import com.iti.chat.dao.StatisticsDAOImpl;
+import com.iti.chat.model.Gender;
+import com.iti.chat.service.SessionService;
+import com.iti.chat.service.SessionServiceProvider;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HomeController implements Initializable {
 
     @FXML
     FlowPane root;
+    StatisticsDAOImpl dao = StatisticsDAOImpl.getInstance();
+    Map<String, Integer> countryMap = dao.countriesStats();
+    Map<Integer, Integer> genderMap = dao.genderStats();
+    
 
-    public BarChart barCountry(int a , int b) {
+    public BarChart barCountry(Map<String, Integer> aMap) {
+        System.out.println(aMap);
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Countries");
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("No of Users");
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.setName("Egypt");
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        series2.setName("USA");
-        
-        series1.getData().add(new XYChart.Data<>("Egypt", 5.0)); 
-        series1.getData().add(new XYChart.Data<>("USA", 9.0)); 
-
-
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis); 
+        BarChart barChart = new BarChart (xAxis, yAxis);
         barChart.setTitle("Population of Countries");
-        barChart.getData().addAll(series1, series2);
+         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        countryMap.forEach((key, value) -> {
+       
+            series1.getData().add(new XYChart.Data(key, value));
+           
 
+        });
+         barChart.getData().addAll(series1);
         return barChart;
 
     }
+    
+    
 
-    public PieChart makePieFemaleMale(double male, double female) {
+    public PieChart makePieFemaleMale(int male, int female) {
+        
         PieChart pie = new PieChart();
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         data.addAll(new PieChart.Data("Male", male),
@@ -52,7 +67,7 @@ public class HomeController implements Initializable {
         );
         pie.setData(data);
         pie.setTitle("Females and Males");
-        double sum = male + female;
+        int sum = male + female;
         for (PieChart.Data d : pie.getData()) {
             Node slice = d.getNode();
             double Precent = (d.getPieValue() / sum) * 100;
@@ -84,10 +99,20 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        root.getChildren().add(makePieFemaleMale(20, 30));
-        root.getChildren().add(makeOnlineOffline(10, 20));
-        root.getChildren().add(barCountry(10, 20));
+        int males = genderMap.getOrDefault(Gender.MALE, 0);
+        int females = genderMap.getOrDefault(Gender.FEMALE, 0);
+        int allCount = dao.allUsersCount();
+        int online = 0;
+        int offline = 0;
+        try {
+            online = SessionServiceProvider.getInstance().onlineUsers();
+            offline = allCount - online ;
+        } catch (RemoteException ex) {
+            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        root.getChildren().add(makePieFemaleMale(males, females));
+        root.getChildren().add(makeOnlineOffline(online, offline));
+        root.getChildren().add(barCountry(countryMap));
 
     }
 
