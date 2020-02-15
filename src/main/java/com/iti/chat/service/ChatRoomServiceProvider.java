@@ -1,5 +1,9 @@
 package com.iti.chat.service;
 
+import com.google.code.chatterbotapi.ChatterBot;
+import com.google.code.chatterbotapi.ChatterBotFactory;
+import com.google.code.chatterbotapi.ChatterBotSession;
+import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.iti.chat.model.ChatRoom;
@@ -24,7 +28,8 @@ import java.util.stream.Collectors;
 public class ChatRoomServiceProvider extends UnicastRemoteObject implements ChatRoomService{
     private static ChatRoomServiceProvider instance;
     private static final int BUFFER_SIZE = 1024 * 1024;
-    private ChatRoomServiceProvider() throws RemoteException{
+    private ChatterBotSession chatterBotSession;
+    private ChatRoomServiceProvider() throws RemoteException {
 
     }
     public static ChatRoomServiceProvider getInstance() throws RemoteException {
@@ -49,7 +54,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         room.getMessages().add(message);
         message.setChatRoom(room);
-        broadcast(message, room);
+        broadcast(message, room, false);
 
     }
 
@@ -74,8 +79,43 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         // set message remotePath
     }
 
+    private void sendAutomatedMessages(ChatRoom room, Message lastMessage) {
+        List<User> busyUsers = room.getUsers().stream().
+                filter(user -> user.isChatBotEnabled() && user.getStatus() == UserStatus.BUSY).
+                collect(Collectors.toList());
+        if(!busyUsers.isEmpty()) {
+            initChatBot();
+            try {
+                String automatedMessage = chatterBotSession.think(lastMessage.getContent());
+                busyUsers.forEach(user -> {
+                    Message message = new Message();
+                    message.setSender(user);
+                    message.setContent(automatedMessage);
+                    try {
+                        broadcast(message, room, true);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-    public void broadcast(Message message, ChatRoom room) throws RemoteException {
+    }
+
+    private void initChatBot() {
+        ChatterBotFactory factory = new ChatterBotFactory();
+        try {
+            ChatterBot bot = factory.create(ChatterBotType.PANDORABOTS, "b0dafd24ee35a477");
+            chatterBotSession = bot.createSession();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void broadcast(Message message, ChatRoom room, boolean automated) throws RemoteException {
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         room.getUsers().parallelStream().filter(user -> !(user.getStatus() == UserStatus.OFFLINE))
             .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
@@ -85,5 +125,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                 e.printStackTrace();
             }
         });
+        if(!automated) {
+            sendAutomatedMessages(room, message);
+        }
+
     }
 }
