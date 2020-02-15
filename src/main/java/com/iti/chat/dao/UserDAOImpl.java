@@ -64,6 +64,25 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    @Override
+    public void updateUserPassword(User user) throws SQLException {
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String updateQuery = "UPDATE chatty.users " +
+                    "SET password = '" + user.getPassword() +
+                    "' where user_id = " + user.getId();
+            //System.out.println(updateQuery);
+            Statement statement = connection.createStatement();
+            statement.execute(updateQuery);
+            //statement.executeUpdate(updateQuery);
+            DBConnection.getInstance().closeConnection(connection);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public User findUserByPhone(String phone) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();

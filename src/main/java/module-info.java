@@ -10,5 +10,6 @@ module ChatServer {
     requires com.jfoenix;
     opens com.main;
     opens com.iti.chat.controller to javafx.fxml;
+    exports com.iti.chat.controller to javafx.fxml;
     exports com.iti.chat.service to java.rmi;
 }
