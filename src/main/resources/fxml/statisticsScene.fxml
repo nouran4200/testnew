@@ -2,21 +2,26 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import java.net.URL?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="383.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.StatisticsController">
    <children>
-      <HBox alignment="CENTER" prefHeight="64.0" prefWidth="600.0" spacing="10.0">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="380.0">
          <children>
-            <JFXButton styleClass="custom-button" text="Country" />
-            <JFXButton styleClass="custom-button" text="Gender" />
-            <JFXButton styleClass="custom-button" text="Status" />
+            <HBox alignment="CENTER" prefHeight="64.0" prefWidth="600.0" spacing="10.0">
+               <children>
+                  <JFXButton fx:id="countryStatsBtn" styleClass="custom-button" text="Country" />
+                  <JFXButton fx:id="genderStatsBtn" styleClass="custom-button" text="Gender" />
+                  <JFXButton fx:id="statusStatsBtn" styleClass="custom-button" text="Status" />
+               </children>
+            </HBox>
+            <VBox fx:id="statsBox" prefHeight="328.0" prefWidth="323.0" />
          </children>
-      </HBox>
-      <VBox prefHeight="328.0" prefWidth="600.0" />
+         <stylesheets>
+            <URL value="@../css/styleSheet.css" />
+         </stylesheets>
+      </VBox>
    </children>
-   <stylesheets>
-      <URL value="@../css/styleSheet.css" />
-   </stylesheets>
-</VBox>
+</AnchorPane>
