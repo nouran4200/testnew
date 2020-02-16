@@ -19,6 +19,7 @@ public class Main extends Application {
     private ChatRoomService chatRoomService;
     private SessionService sessionService;
     private FriendRequestsService friendRequestsService;
+    private FileTransferService fileTransferService;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -31,9 +32,11 @@ public class Main extends Application {
             chatRoomService = ChatRoomServiceProvider.getInstance();
             sessionService = SessionServiceProvider.getInstance();
             friendRequestsService = FriendRequestServiceProvider.getInstance();
+            fileTransferService = FileTransferServiceProvider.getInstance();
             registry.rebind("chatRoomService", chatRoomService);
             registry.rebind("sessionService", sessionService);
             registry.rebind("friendRequestsService", friendRequestsService);
+            registry.rebind("fileTransferService", fileTransferService);
             System.out.println("server running");
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -46,10 +49,12 @@ public class Main extends Application {
                 registry.unbind("friendRequestsService");
                 registry.unbind("chatRoomService");
                 registry.unbind("sessionService");
+                registry.unbind("fileTransferService");
 
                 UnicastRemoteObject.unexportObject(chatRoomService , false);
                 UnicastRemoteObject.unexportObject(sessionService , false);
                 UnicastRemoteObject.unexportObject(friendRequestsService , false);
+                UnicastRemoteObject.unexportObject(fileTransferService, false);
 
             } catch (RemoteException e) {
                 e.printStackTrace();

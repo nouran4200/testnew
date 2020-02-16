@@ -47,6 +47,6 @@ public class FileTransfer {
     public static void get(String path, ClientService clientService) throws IOException {
         InputStream inputStream = new FileInputStream(path);
         RemoteInputStreamServer remoteFileData = new SimpleRemoteInputStream(inputStream);
-        clientService.download(remoteFileData);
+        //clientService.download(remoteFileData);
     }
 }
