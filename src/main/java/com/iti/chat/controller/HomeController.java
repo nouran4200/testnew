@@ -119,6 +119,7 @@ public class HomeController implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(HomeController.class.getResource("/fxml/Service.fxml"));
                 Parent parent = loader.load();
+                container.getChildren().clear();
                 container.getChildren().add(parent);
             } catch (IOException ex) {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,6 +130,8 @@ public class HomeController implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(HomeController.class.getResource("/fxml/Announcment.fxml"));
                 Parent parent = loader.load();
+                container.getChildren().clear();
+
                 container.getChildren().add(parent);
             } catch (IOException ex) {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,6 +143,7 @@ public class HomeController implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(HomeController.class.getResource("/fxml/Service.fxml"));
                 Parent parent = loader.load();
+                container.getChildren().clear();
                 container.getChildren().add(parent);
             } catch (IOException ex) {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
