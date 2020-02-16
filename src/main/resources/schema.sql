@@ -9,8 +9,25 @@ CREATE TABLE users(
     country varchar(20) not null default 'Egypt',
     password varchar(30) not null,
 	phone varchar(15) unique not null,
+	image_uri varchar(100),
 	bio varchar(250)
 );
+
+create table friend_relationships
+(
+	user_1 int not null,
+	user_2 int not null,
+	constraint friend_relationships_pk
+		primary key (user_1 , user_2),
+	constraint friend_relationships_users2___fk
+		foreign key (user_1) references users (user_id)
+			on update cascade on delete cascade,
+	constraint friend_relationships_users___fk
+		foreign key (user_1) references users (user_id)
+			on update cascade on delete cascade
+);
+
+
 
 CREATE TABLE friend_requests(
 	sender_id INT not null,
@@ -54,15 +71,3 @@ CREATE TABLE notifications(
     
 );
 
-insert into users (first_name, last_name, user_status, email, password, phone)
-	values ("khaled", "elhossiny", 0, "khaled.elhossiny10@gmail.com", "password", "0122222");
-    
-insert into users (first_name, last_name, user_status, email, password, phone)
-	values ("abdelrahman", "elhossiny", 0, "abdo.elhossiny10@gmail.com", "password", "01111");
-    
-insert into friend_requests (sender_id, receiver_id, status) values (1, 2, 1);
-    
-insert into chat_rooms () values ();
-
-insert into messages (message_type, sender_id, chat_room_id, content)
-	values (0, 1, 1, "hello");
