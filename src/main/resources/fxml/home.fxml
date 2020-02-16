@@ -10,5 +10,15 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.iti.chat.controller.HomeController"
             prefHeight="400.0" prefWidth="600.0" fx:id = "root">
+    <children>
+        <HBox>
+            <children>
+                <fx:include source="adminbar.fxml" fx:id="adminbar"/>
+                <AnchorPane fx:id = "container">
+                    
+                </AnchorPane>
+            </children>
+        </HBox>
+    </children>
 
 </FlowPane>

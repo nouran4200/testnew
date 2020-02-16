@@ -23,18 +23,25 @@ import com.iti.chat.dao.StatisticsDAOImpl;
 import com.iti.chat.model.Gender;
 import com.iti.chat.service.SessionService;
 import com.iti.chat.service.SessionServiceProvider;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
 public class HomeController implements Initializable {
 
     @FXML
-    FlowPane root;
+    AdminbarController adminbarController;
+
+    @FXML
+    AnchorPane container;
+
     StatisticsDAOImpl dao = StatisticsDAOImpl.getInstance();
     Map<String, Integer> countryMap = dao.countriesStats();
     Map<Integer, Integer> genderMap = dao.genderStats();
-    
 
     public BarChart barCountry(Map<String, Integer> aMap) {
         System.out.println(aMap);
@@ -42,24 +49,21 @@ public class HomeController implements Initializable {
         xAxis.setLabel("Countries");
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("No of Users");
-        BarChart barChart = new BarChart (xAxis, yAxis);
+        BarChart barChart = new BarChart(xAxis, yAxis);
         barChart.setTitle("Population of Countries");
-         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         countryMap.forEach((key, value) -> {
-       
+
             series1.getData().add(new XYChart.Data(key, value));
-           
 
         });
-         barChart.getData().addAll(series1);
+        barChart.getData().addAll(series1);
         return barChart;
 
     }
-    
-    
 
     public PieChart makePieFemaleMale(int male, int female) {
-        
+
         PieChart pie = new PieChart();
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         data.addAll(new PieChart.Data("Male", male),
@@ -106,13 +110,44 @@ public class HomeController implements Initializable {
         int offline = 0;
         try {
             online = SessionServiceProvider.getInstance().onlineUsers();
-            offline = allCount - online ;
+            offline = allCount - online;
         } catch (RemoteException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        root.getChildren().add(makePieFemaleMale(males, females));
-        root.getChildren().add(makeOnlineOffline(online, offline));
-        root.getChildren().add(barCountry(countryMap));
+        adminbarController.serviceButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/Service.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        adminbarController.announcButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/Announcment.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        adminbarController.StatsButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/Service.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+//        root.getChildren().add(makePieFemaleMale(males, females));
+//        root.getChildren().add(makeOnlineOffline(online, offline));
+//        root.getChildren().add(barCountry(countryMap));
 
     }
 
