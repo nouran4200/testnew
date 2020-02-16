@@ -21,6 +21,7 @@ public interface ClientService extends Remote {
     void updateUserInfo(User user) throws RemoteException, SQLException;
     void updateUserPassword(User user) throws RemoteException, SQLException;
     void didSendNBytes(long n) throws RemoteException;
-    public void download(RemoteInputStream remoteInputStream) throws IOException;
+    void downloadFile(RemoteInputStream remoteInputStream) throws IOException;
+    void downloadImage(RemoteInputStream remoteInputStream) throws IOException;
 
 }
