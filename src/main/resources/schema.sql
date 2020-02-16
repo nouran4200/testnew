@@ -13,22 +13,6 @@ CREATE TABLE users(
 	bio varchar(250)
 );
 
-create table friend_relationships
-(
-	user_1 int not null,
-	user_2 int not null,
-	constraint friend_relationships_pk
-		primary key (user_1 , user_2),
-	constraint friend_relationships_users2___fk
-		foreign key (user_1) references users (user_id)
-			on update cascade on delete cascade,
-	constraint friend_relationships_users___fk
-		foreign key (user_1) references users (user_id)
-			on update cascade on delete cascade
-);
-
-
-
 CREATE TABLE friend_requests(
 	sender_id INT not null,
     receiver_id INT not null,
