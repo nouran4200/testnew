@@ -59,14 +59,14 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
         executorService.submit(() -> {
             try {
-                fileTransferServiceProvider.uploadFile(token + message.getContent(), remoteInputStream, clientService);
-                message.setRemotePath(token + message.getContent());
+                String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token + message.getContent();
+                fileTransferServiceProvider.uploadFile(remotePath, remoteInputStream, clientService);
+                message.setRemotePath(remotePath);
                 sendMessage(message, room);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-        // set message remotePath
     }
 
     public void getFile(String path, ClientService clientService) throws IOException {
