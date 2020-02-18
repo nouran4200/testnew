@@ -21,6 +21,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class FileTransferServiceProvider extends UnicastRemoteObject implements FileTransferService {
+    protected static final String ROOT_FILES_PATH = "uploaded files";
     private static FileTransferServiceProvider instance;
     private static final int BUFFER_SIZE = 1024 * 1024;
     private FileTransferServiceProvider() throws RemoteException {
