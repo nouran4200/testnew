@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatRoom implements Serializable {
+public class ChatRoom implements Serializable{
     private int id;
     private List<User> users;
     private List<Message> messages;
@@ -53,11 +53,21 @@ public class ChatRoom implements Serializable {
 
     public void addUser(User user) {
         users.add(user);
-        user.getChatRooms().add(this);
+//        user.getChatRooms().add(this);
     }
 
     public void setUsers(List<User> users) {
 
         this.users = users;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if(object instanceof ChatRoom) {
+            ChatRoom chatRoom = (ChatRoom) object;
+            return users.containsAll(chatRoom.getUsers()) && chatRoom.getUsers().containsAll(users);
+        }
+        return false;
+    }
+
 }

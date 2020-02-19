@@ -1,0 +1,9 @@
+.custom-button {
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+    -fx-background-color: #4c84ff;
+    -fx-text-fill: white;
+}
+.background_sideBar{
+    -fx-background-color: #ffffff;
+}

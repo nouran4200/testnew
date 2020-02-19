@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
 
-<FlowPane xmlns="http://javafx.com/HomeControllerjavafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.iti.chat.controller.HomeController"
-            prefHeight="400.0" prefWidth="600.0" fx:id = "root">
+<FlowPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.HomeController">
+    <children>
+        <HBox>
+            <children>
+                <fx:include fx:id="adminbar" source="adminbar.fxml" />
+
+            </children>
+        </HBox>
+
+        <AnchorPane fx:id="container" prefHeight="400.0" prefWidth="388.0">
+
+        </AnchorPane>
+    </children>
+
 
 </FlowPane>

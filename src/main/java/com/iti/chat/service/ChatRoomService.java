@@ -13,5 +13,6 @@ import java.util.List;
 public interface ChatRoomService extends Remote {
     ChatRoom createNewChatRoom(List<User> users) throws RemoteException;
     void sendMessage(Message message, ChatRoom room) throws RemoteException;
-    void sendFile(Message message, RemoteInputStream remoteInputStream) throws IOException;
+    void sendFile(Message message, ChatRoom room, RemoteInputStream remoteInputStream) throws IOException;
+    void getFile(String path, ClientService clientService) throws IOException;
 }

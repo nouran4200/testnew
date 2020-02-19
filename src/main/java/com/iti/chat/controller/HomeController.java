@@ -3,7 +3,10 @@ package com.iti.chat.controller;
 import javafx.fxml.Initializable;
 
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,78 +19,69 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
+import com.iti.chat.dao.StatisticsDAOImpl;
+import com.iti.chat.model.Gender;
+import com.iti.chat.service.SessionService;
+import com.iti.chat.service.SessionServiceProvider;
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
 public class HomeController implements Initializable {
 
     @FXML
-    FlowPane root;
+    AdminbarController adminbarController;
 
-    public BarChart barCountry(int a , int b) {
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Countries");
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("No of Users");
-        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1.setName("Egypt");
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        series2.setName("USA");
-        
-        series1.getData().add(new XYChart.Data<>("Egypt", 5.0)); 
-        series1.getData().add(new XYChart.Data<>("USA", 9.0)); 
+    @FXML
+    AnchorPane container;
 
 
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis); 
-        barChart.setTitle("Population of Countries");
-        barChart.getData().addAll(series1, series2);
-
-        return barChart;
-
-    }
-
-    public PieChart makePieFemaleMale(double male, double female) {
-        PieChart pie = new PieChart();
-        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        data.addAll(new PieChart.Data("Male", male),
-                new PieChart.Data("Female", female)
-        );
-        pie.setData(data);
-        pie.setTitle("Females and Males");
-        double sum = male + female;
-        for (PieChart.Data d : pie.getData()) {
-            Node slice = d.getNode();
-            double Precent = (d.getPieValue() / sum) * 100;
-            String tip = d.getName() + " = " + String.format("%.2f", Precent) + "%";
-            Tooltip tt = new Tooltip(tip);
-            Tooltip.install(slice, tt);
-        }
-        return pie;
-    }
-
-    public PieChart makeOnlineOffline(double online, double offline) {
-        PieChart pie = new PieChart();
-        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        data.addAll(new PieChart.Data("Online", online),
-                new PieChart.Data("Offline", offline)
-        );
-        pie.setData(data);
-        pie.setTitle("Online And Offline");
-        double sum = online + offline;
-        for (PieChart.Data d : pie.getData()) {
-            Node slice = d.getNode();
-            double Precent = (d.getPieValue() / sum) * 100;
-            String tip = d.getName() + " = " + String.format("%.2f", Precent) + "%";
-            Tooltip tt = new Tooltip(tip);
-            Tooltip.install(slice, tt);
-        }
-        return pie;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        root.getChildren().add(makePieFemaleMale(20, 30));
-        root.getChildren().add(makeOnlineOffline(10, 20));
-        root.getChildren().add(barCountry(10, 20));
+        adminbarController.serviceButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/Service.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().clear();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        adminbarController.announcButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/Announcment.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().clear();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+        adminbarController.StatsButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/statisticsScene.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().clear();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
+//        root.getChildren().add(makePieFemaleMale(males, females));
+//        root.getChildren().add(makeOnlineOffline(online, offline));
+//        root.getChildren().add(barCountry(countryMap));
 
     }
 

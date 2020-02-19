@@ -31,6 +31,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
         return managedSessions.get(user);
     }
+    
+    public int onlineUsers() {
+        return managedSessions.size();
+    }
 
     @Override
     public void updateInfo(User user) {

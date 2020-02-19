@@ -9,6 +9,7 @@ CREATE TABLE users(
     country varchar(20) not null default 'Egypt',
     password varchar(30) not null,
 	phone varchar(15) unique not null,
+	image_uri varchar(100),
 	bio varchar(250)
 );
 
@@ -53,3 +54,4 @@ CREATE TABLE notifications(
     foreign key (receiver_id) references users(user_id) ON DELETE CASCADE
     
 );
+

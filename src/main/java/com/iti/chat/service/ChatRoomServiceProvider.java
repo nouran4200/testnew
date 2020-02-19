@@ -9,28 +9,27 @@ import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.iti.chat.dao.NotificationDAO;
 import com.iti.chat.dao.NotificationDAOImpl;
 import com.iti.chat.model.*;
+import com.iti.chat.model.ChatRoom;
+import com.iti.chat.model.Message;
+import com.iti.chat.model.User;
+import com.iti.chat.model.UserStatus;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class ChatRoomServiceProvider extends UnicastRemoteObject implements ChatRoomService{
     private static ChatRoomServiceProvider instance;
-    private static final int BUFFER_SIZE = 1024 * 1024;
     private ChatterBotSession chatterBotSession;
+    ExecutorService executorService;
     private ChatRoomServiceProvider() throws RemoteException {
-
+        executorService = Executors.newFixedThreadPool(3);
     }
     public static ChatRoomServiceProvider getInstance() throws RemoteException {
         if(instance == null) {
@@ -70,26 +69,31 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     }
 
     @Override
-    public void sendFile(Message message, RemoteInputStream remoteInputStream) throws IOException {
-        InputStream fileData = RemoteInputStreamClient.wrap(remoteInputStream);
-        ReadableByteChannel from = Channels.newChannel(fileData);
-        ByteBuffer buffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
-        String path = "uploaded files/" + message.getContent();
-        System.out.println("saving at " + path);
-        WritableByteChannel to = FileChannel.open(Paths.get(path), StandardOpenOption.WRITE, StandardOpenOption.CREATE_NEW);
-        while (from.read(buffer) != -1)
-        {
-            buffer.flip();
-            while (buffer.hasRemaining()) {
-                to.write(buffer);
+    public void sendFile(Message message, ChatRoom room, RemoteInputStream remoteInputStream) throws IOException {
+        String token = UUID.randomUUID().toString();
+        FileTransferServiceProvider fileTransferServiceProvider = FileTransferServiceProvider.getInstance();
+        ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
+        executorService.submit(() -> {
+            try {
+                String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token + message.getContent();
+                fileTransferServiceProvider.uploadFile(remotePath, remoteInputStream, clientService);
+                message.setRemotePath(remotePath);
+                sendMessage(message, room);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            buffer.clear();
-        }
-        from.close();
-        to.close();
-        fileData.close();
+        });
+    }
 
-        // set message remotePath
+    public void getFile(String path, ClientService clientService) throws IOException {
+        FileTransferServiceProvider fileTransferServiceProvider = FileTransferServiceProvider.getInstance();
+        executorService.submit(() -> {
+            try {
+                fileTransferServiceProvider.downloadFile(path, clientService);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void sendAutomatedMessages(ChatRoom room, Message lastMessage) {
@@ -130,8 +134,17 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     public void broadcast(Message message, ChatRoom room, boolean automated) throws RemoteException {
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
-        room.getUsers().parallelStream().filter(user -> !(user.getStatus() == UserStatus.OFFLINE))
-            .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
+//        room.getUsers().parallelStream().filter(user -> !(user.getStatus() == UserStatus.OFFLINE))
+//            .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
+//            try {
+//                client.receiveMessage(message);
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//        });
+
+        room.getUsers().parallelStream()
+                .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
             try {
                 client.receiveMessage(message);
             } catch (RemoteException e) {
