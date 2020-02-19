@@ -13,14 +13,29 @@ import java.util.TreeMap;
 
 public class SessionServiceProvider extends UnicastRemoteObject implements SessionService {
     private Map<User, ClientService> managedSessions;
+    private Map<Integer, User> totalUsers;
     private static SessionServiceProvider instance;
+
     private SessionServiceProvider() throws RemoteException {
 
-        managedSessions = new TreeMap<>();
+        try {
+
+            managedSessions = new TreeMap<>();
+            totalUsers = new TreeMap<>();
+            //populating total users map with all the users in thew system fetched by user dao
+            UserDAOImpl.getInstance().getAllUsers().stream().forEach((element) -> {
+
+                totalUsers.put(element.getId(), element);
+
+            });
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static SessionServiceProvider getInstance() throws RemoteException {
-        if(instance == null) {
+        if (instance == null) {
             instance = new SessionServiceProvider();
         }
         return instance;
@@ -31,7 +46,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
         return managedSessions.get(user);
     }
-    
+
     public int onlineUsers() {
         return managedSessions.size();
     }
@@ -60,9 +75,32 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     public User login(String phone, String password, ClientService client) throws SQLException, RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         User user = userDAO.login(phone, password);
-        if(user != null) {
-            managedSessions.put(user, client);
+
+        //checking the list of all the friends of the user in order to update their status
+        //to have the contact list in the client side populated with the most recent update
+        //of his friends' statuses
+
+        //looping over all the friends to update their status
+        for (User friend : user.getFriends()) {
+
+            //checking the map of the online users if this friend is online
+
+            //if the user exists then get his recent status
+            if (managedSessions.get(friend) != null) {
+
+                User onlineFriend = managedSessions.get(friend).getUser();
+                friend.setStatus(onlineFriend.getStatus());
+
+            }
+
+            //else the friend's status is by default offline
+
+        }
+        if (user != null) {
+            //login process
             user.setStatus(UserStatus.ONLINE);
+            managedSessions.put(user, client);
+            totalUsers.put(user.getId() , user);
             client.setUser(user);
         }
         return user;
@@ -77,6 +115,11 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     public void register(User user, String password) throws SQLException, RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         userDAO.register(user, password);
+    }
+    
+    public Map<User, ClientService> getClientService ()
+    {
+        return managedSessions;
     }
 
 }
