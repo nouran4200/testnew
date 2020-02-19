@@ -53,16 +53,3 @@ CREATE TABLE notifications(
     foreign key (receiver_id) references users(user_id) ON DELETE CASCADE
     
 );
-
-insert into users (first_name, last_name, user_status, email, password, phone)
-	values ("khaled", "elhossiny", 0, "khaled.elhossiny10@gmail.com", "password", "0122222");
-    
-insert into users (first_name, last_name, user_status, email, password, phone)
-	values ("abdelrahman", "elhossiny", 0, "abdo.elhossiny10@gmail.com", "password", "01111");
-    
-insert into friend_requests (sender_id, receiver_id, status) values (1, 2, 1);
-    
-insert into chat_rooms () values ();
-
-insert into messages (message_type, sender_id, chat_room_id, content)
-	values (0, 1, 1, "hello");

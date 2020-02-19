@@ -6,10 +6,9 @@ import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
-import com.iti.chat.model.ChatRoom;
-import com.iti.chat.model.Message;
-import com.iti.chat.model.User;
-import com.iti.chat.model.UserStatus;
+import com.iti.chat.dao.NotificationDAO;
+import com.iti.chat.dao.NotificationDAOImpl;
+import com.iti.chat.model.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +55,17 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         room.getMessages().add(message);
         message.setChatRoom(room);
         broadcast(message, room, false);
+        for(int i=0;i<room.getUsers().size();i++){
+            if(!message.getSender().equals(room.getUsers().get(i))){
+                NotificationDAO notificationDAO=new NotificationDAOImpl();
+                try {
+                    notificationDAO.createNotification(new Notification(message.getSender(),room.getUsers().get(i),NotificationType.MESSAGE_RECEIVED));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
 
     }
 
