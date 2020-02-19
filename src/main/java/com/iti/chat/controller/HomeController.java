@@ -78,6 +78,17 @@ public class HomeController implements Initializable {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        adminbarController.addContactButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/newContatct.fxml"));
+                Parent parent = loader.load();
+                container.getChildren().clear();
+                container.getChildren().add(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
 //        root.getChildren().add(makePieFemaleMale(males, females));
 //        root.getChildren().add(makeOnlineOffline(online, offline));
