@@ -5,9 +5,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
+<?import javafx.scene.layout.VBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="383.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXTextArea layoutX="32.0" layoutY="63.0" prefHeight="176.0" prefWidth="322.0" promptText="Announcment" style="-fx-background-color: #e6e6ff;" unFocusColor="#2196f3" />
-      <JFXButton fx:id="serviceButton111" layoutX="139.0" layoutY="273.0" prefHeight="47.0" prefWidth="100.0" style="-fx-background-color: #2196f3;" text="Send" textFill="WHITE" />
+       <VBox alignment="CENTER" spacing="20">
+           <JFXTextArea prefHeight="150.0" prefWidth="350.0" promptText="Announcement" unFocusColor="#2196f3" />
+           <JFXButton fx:id="serviceButton111" prefHeight="47.0" prefWidth="100.0" style="-fx-background-color: #2196f3;" text="Send" textFill="WHITE" />
+       </VBox>
    </children>
 </AnchorPane>

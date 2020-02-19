@@ -4,18 +4,16 @@ import com.iti.chat.dao.StatisticsDAOImpl;
 import com.iti.chat.model.Gender;
 import com.iti.chat.service.SessionServiceProvider;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXMasonryPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.Map;
@@ -36,17 +34,22 @@ public class StatisticsController implements Initializable {
     @FXML
     private JFXButton statusStatsBtn;
 
+    @FXML
+    JFXMasonryPane masonryPane;
+
     StatisticsDAOImpl dao = StatisticsDAOImpl.getInstance();
     Map<String, Integer> countryMap = dao.countriesStats();
     Map<Integer, Integer> genderMap = dao.genderStats();
+    static final int SIZE = 300;
 
     public BarChart barCountry(Map<String, Integer> aMap) {
-        System.out.println(aMap);
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Countries");
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("No of Users");
         BarChart barChart = new BarChart(xAxis, yAxis);
+        barChart.setPrefHeight(SIZE);
+        barChart.setPrefWidth(SIZE);
         barChart.setTitle("Population of Countries");
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         countryMap.forEach((key, value) -> {
@@ -62,6 +65,8 @@ public class StatisticsController implements Initializable {
     public PieChart makePieFemaleMale(int male, int female) {
 
         PieChart pie = new PieChart();
+        pie.setPrefHeight(SIZE);
+        pie.setPrefWidth(SIZE);
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         data.addAll(new PieChart.Data("Male", male),
                 new PieChart.Data("Female", female)
@@ -81,6 +86,8 @@ public class StatisticsController implements Initializable {
 
     public PieChart makeOnlineOffline(double online, double offline) {
         PieChart pie = new PieChart();
+        pie.setPrefHeight(SIZE);
+        pie.setPrefWidth(SIZE);
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         data.addAll(new PieChart.Data("Online", online),
                 new PieChart.Data("Offline", offline)
@@ -100,6 +107,7 @@ public class StatisticsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        masonryPane.setHSpacing(20);
         int males = genderMap.getOrDefault(Gender.MALE, 0);
         int females = genderMap.getOrDefault(Gender.FEMALE, 0);
         int allCount = dao.allUsersCount();
@@ -111,26 +119,29 @@ public class StatisticsController implements Initializable {
         } catch (RemoteException ex) {
             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        countryStatsBtn.setOnAction(ae -> {
-            System.out.println("country");
-            statsBox.getChildren().clear();
-            statsBox.getChildren().add(barCountry(countryMap));
-
-        });
-        genderStatsBtn.setOnAction(ae -> {
-            System.out.println("gender");
-            statsBox.getChildren().clear();
-            statsBox.getChildren().add(makePieFemaleMale(males, females));
-
-        });
-        int finalOnline = online;
-        int finalOffline = offline;
-        statusStatsBtn.setOnAction(ae -> {
-            System.out.println("status");
-            statsBox.getChildren().clear();
-            statsBox.getChildren().add(makeOnlineOffline(finalOnline, finalOffline));
-
-        });
+        masonryPane.getChildren().add(barCountry(countryMap));
+        masonryPane.getChildren().add(makePieFemaleMale(males, females));
+        masonryPane.getChildren().add(makeOnlineOffline(online, offline));
+//        countryStatsBtn.setOnAction(ae -> {
+//            System.out.println("country");
+//            statsBox.getChildren().clear();
+//            statsBox.getChildren().add(barCountry(countryMap));
+//
+//        });
+//        genderStatsBtn.setOnAction(ae -> {
+//            System.out.println("gender");
+//            statsBox.getChildren().clear();
+//            statsBox.getChildren().add(makePieFemaleMale(males, females));
+//
+//        });
+//        int finalOnline = online;
+//        int finalOffline = offline;
+//        statusStatsBtn.setOnAction(ae -> {
+//            System.out.println("status");
+//            statsBox.getChildren().clear();
+//            statsBox.getChildren().add(makeOnlineOffline(finalOnline, finalOffline));
+//
+//        });
 
 
     }
