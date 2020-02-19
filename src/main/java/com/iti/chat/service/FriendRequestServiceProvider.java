@@ -1,9 +1,6 @@
 package com.iti.chat.service;
 
-import com.iti.chat.dao.FriendRequestDAO;
-import com.iti.chat.dao.FriendRequestDAOImpl;
-import com.iti.chat.dao.UserDAO;
-import com.iti.chat.dao.UserDAOImpl;
+import com.iti.chat.dao.*;
 import com.iti.chat.model.Notification;
 import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
@@ -30,18 +27,36 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
     public void sendFriendRequest(ClientService client, User receiver) throws RemoteException {
         friendRequestDAO.sendFriendRequest(client.getUser(), receiver);
         Notification notification = new Notification(client.getUser(), receiver, NotificationType.FRIENDSHIP_REQUEST_RECEIVED);
+        NotificationDAO notificationDAO=new NotificationDAOImpl();
+        try {
+            notificationDAO.createNotification(notification);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void acceptFriendRequest(ClientService client, User sender) throws RemoteException {
         friendRequestDAO.acceptFriendRequest(client.getUser(), sender);
         Notification notification = new Notification(client.getUser(), sender, NotificationType.FRIENDSHIP_ACCEPTED);
+        NotificationDAO notificationDAO=new NotificationDAOImpl();
+        try {
+            notificationDAO.createNotification(notification);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void rejectFriendRequest(ClientService client, User sender) throws RemoteException {
         friendRequestDAO.rejectFriendRequest(client.getUser(), sender);
         Notification notification = new Notification(client.getUser(), sender, NotificationType.FRIENDSHIP_REJECTED);
+        NotificationDAO notificationDAO=new NotificationDAOImpl();
+        try {
+            notificationDAO.createNotification(notification);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public User searchByPhone(String phone) throws RemoteException, SQLException {
