@@ -78,5 +78,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         UserDAO userDAO = UserDAOImpl.getInstance();
         userDAO.register(user, password);
     }
+    
+    public Map<User, ClientService> getClientService ()
+    {
+        return managedSessions;
+    }
 
 }
