@@ -192,6 +192,15 @@ public class User implements Comparable<User>, Serializable {
         return false;
     }
 
+    public ChatRoom getSharedChatRoom(List<User> users) {
+        for(ChatRoom chatRoom : chatRooms) {
+            if(chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
+                return chatRoom;
+            }
+        }
+        return null;
+    }
+
     @Override
     public int hashCode() {
         return id;

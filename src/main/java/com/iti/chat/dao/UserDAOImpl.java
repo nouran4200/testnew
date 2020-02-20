@@ -146,4 +146,21 @@ public class UserDAOImpl implements UserDAO {
             throw new DuplicatePhoneException("phone is already used");
         }
     }
+
+
+    @Override
+    public List<User> getAllUsers() throws SQLException {
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String nameQuery = "select * from users";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(nameQuery);
+            List<User> users = UserAdapter.createUsers(resultSet);
+            DBConnection.getInstance().closeConnection(connection);
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
