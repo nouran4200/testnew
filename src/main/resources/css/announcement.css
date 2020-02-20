@@ -2,3 +2,11 @@
     -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
     -fx-background-color: #e6e6ff;
 }
+
+.sendButton {
+    -fx-font: bold 20px "Calibri";
+    -fx-background-color:  #4c84ff;
+    -fx-background-radius: 8,7,6;
+    -fx-text-alignment: center;
+    -fx-text-fill:  #ffffff;
+}

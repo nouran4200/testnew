@@ -59,7 +59,7 @@ public class HomeController implements Initializable {
         adminbarController.addContactButton.setOnAction(ae -> {
             try {
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(HomeController.class.getResource("/fxml/newContatct.fxml"));
+                loader.setLocation(HomeController.class.getResource("/fxml/addContact.fxml"));
                 Parent parent = loader.load();
                 root.setCenter(parent);
             } catch (IOException ex) {
