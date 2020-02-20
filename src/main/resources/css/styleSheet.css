@@ -7,3 +7,20 @@
 .background_sideBar{
     -fx-background-color: #ffffff;
 }
+
+.menuButton {
+     -fx-font-weight: bold;
+     -fx-font-family: Arial;
+     -fx-font-size: 18;
+}
+
+.toggleButton {
+     -fx-font-weight: bold;
+     -fx-font-family: Arial;
+     -fx-font-size: 18;
+}
+
+.menuButton:hover {
+    -fx-border-color: #0099ff;
+    -fx-border-width: 0px 0px 3px 0px;
+}

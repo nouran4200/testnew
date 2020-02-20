@@ -6,11 +6,9 @@ import com.iti.chat.model.Notification;
 import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;

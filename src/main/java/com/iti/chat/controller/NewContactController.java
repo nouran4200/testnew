@@ -1,13 +1,10 @@
 package com.iti.chat.controller;
 
-import com.iti.chat.dao.UserDAO;
-import com.iti.chat.dao.UserDAOImpl;
 import com.iti.chat.delegate.RegiseterDelegate;
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.Gender;
 import com.iti.chat.model.User;
 import com.iti.chat.util.RegisterValidation;
-import com.mysql.cj.jdbc.NonRegisteringDriver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

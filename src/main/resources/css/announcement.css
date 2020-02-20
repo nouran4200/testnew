@@ -1,0 +1,4 @@
+.text-area {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
+    -fx-background-color: #e6e6ff;
+}
