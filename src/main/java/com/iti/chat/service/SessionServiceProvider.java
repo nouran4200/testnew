@@ -2,6 +2,8 @@ package com.iti.chat.service;
 
 import com.iti.chat.dao.UserDAO;
 import com.iti.chat.dao.UserDAOImpl;
+import com.iti.chat.model.Notification;
+import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
 
@@ -9,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -104,7 +107,32 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             totalUsers.put(user.getId() , user);
             client.setUser(user);
         }
+
+        //Notify all user's friends with his recent presence
+        Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
+        notifyUsersFriends(notification);
+
         return user;
+    }
+
+    private void notifyUsersFriends(Notification notification){
+
+        List<User> friends = notification.getSource().getFriends();
+
+        for(User friend : friends){
+
+            if (managedSessions.get(friend) != null){
+
+                try {
+                    managedSessions.get(friend).receiveNotification(notification);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
     }
 
     @Override
