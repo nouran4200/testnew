@@ -83,10 +83,37 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+    @Override
+    public void updateImage(String url, User user) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String updateQuery = "UPDATE chatty.users " +
+                "SET image_uri = '" + url +
+                "' where user_id = " + user.getId();
+        Statement statement = connection.createStatement();
+        statement.execute(updateQuery);
+        DBConnection.getInstance().closeConnection(connection);
+
+    }
+
     public User findUserByPhone(String phone) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "select * from users where phone = " + phone;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            User user = UserAdapter.createUser(resultSet);
+            DBConnection.getInstance().closeConnection(connection);
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+    public User findUserById(int id)  throws SQLException{
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String query = "select * from users where user_id = " + id;
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             User user = UserAdapter.createUser(resultSet);
@@ -163,4 +190,22 @@ public class UserDAOImpl implements UserDAO {
             return null;
         }
     }
+
+    public List<User> searchByPhone(String searchQuery) throws SQLException {
+        searchQuery = "%" + searchQuery + "%";
+        searchQuery = StringUtil.addSingleQuotes(searchQuery);
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String phoneQuery = "select * from users where phone like " + searchQuery ;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(phoneQuery);
+            List<User> users = UserAdapter.createUsers(resultSet);
+            DBConnection.getInstance().closeConnection(connection);
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
