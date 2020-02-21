@@ -5,6 +5,7 @@
  */
 package com.iti.chat.controller;
 
+import com.iti.chat.model.Notification;
 import com.iti.chat.service.SessionServiceProvider;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
