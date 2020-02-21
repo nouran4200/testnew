@@ -163,4 +163,22 @@ public class UserDAOImpl implements UserDAO {
             return null;
         }
     }
+
+    public List<User> searchByPhone(String searchQuery) throws SQLException {
+        searchQuery = "%" + searchQuery + "%";
+        searchQuery = StringUtil.addSingleQuotes(searchQuery);
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String phoneQuery = "select * from users where phone like " + searchQuery ;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(phoneQuery);
+            List<User> users = UserAdapter.createUsers(resultSet);
+            DBConnection.getInstance().closeConnection(connection);
+            return users;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
