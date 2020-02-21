@@ -10,7 +10,7 @@
    <children>
       <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <VBox prefHeight="400.0" prefWidth="332.0" spacing="13.0">
+            <VBox prefHeight="400.0" prefWidth="500.0" spacing="13.0">
                <children>
                   <Label styleClass="normal_label" text="First Name">
                      <font>
@@ -112,3 +112,5 @@
       </HBox>
    </children>
 </AnchorPane>
+
+
