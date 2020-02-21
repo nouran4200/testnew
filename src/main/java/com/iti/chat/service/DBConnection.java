@@ -2,21 +2,28 @@ package com.iti.chat.service;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBConnection {
-    private static final String user = "root";
-    private static final String password = "password";
-    private static final String url = "jdbc:mysql://localhost:3306/chatty";
     private MysqlDataSource dataSource;
     private static DBConnection dbConnection;
 
     private DBConnection() {
+        InputStream inputStream = getClass().getResourceAsStream("/db/dbconfig.properties");
+        Properties properties = new Properties();
+        try {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         dataSource = new MysqlDataSource();
-        dataSource.setPassword(password);
-        dataSource.setUser(user);
-        dataSource.setURL(url);
+        dataSource.setPassword(properties.getProperty("password"));
+        dataSource.setUser(properties.getProperty("user"));
+        dataSource.setURL(properties.getProperty("url"));
     }
 
     public static DBConnection getInstance() {
