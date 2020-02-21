@@ -98,6 +98,21 @@ public class UserDAOImpl implements UserDAO {
         }
 
     }
+    public User findUserById(int id)  throws SQLException{
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String query = "select * from users where user_id = " + id;
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            User user = UserAdapter.createUser(resultSet);
+            DBConnection.getInstance().closeConnection(connection);
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 
 
     public User login(String phone, String password) throws SQLException {

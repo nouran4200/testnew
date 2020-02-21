@@ -1,6 +1,7 @@
 package com.iti.chat.dao;
 
 import com.iti.chat.model.Notification;
+import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
 import com.iti.chat.service.DBConnection;
 import com.iti.chat.util.StringUtil;
@@ -52,8 +53,18 @@ public class NotificationDAOImpl implements NotificationDAO {
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "select n.* from notifications n, users u where n.receiver_id = " + user.getId();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
-            while(resultSet.next()) {
+          //  ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement preparedStatement=connection.prepareStatement(query);
+           // ResultSet resultSet=preparedStatement.getResultSet();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+
+                  notificationList.add(new Notification(UserDAOImpl.getInstance().findUserById(resultSet.getInt("source_id")),UserDAOImpl.getInstance().findUserById(resultSet.getInt("receiver_id")),resultSet.getInt("notification_status")));
+
+            }
+            //return notificationList;
+            /*while(
+            resultSet.next()) {
                 int cols = resultSet.getMetaData().getColumnCount();
                 Notification[] arr = new Notification[cols];
                 for (int i = 0; i < cols; i++) {
@@ -61,6 +72,8 @@ public class NotificationDAOImpl implements NotificationDAO {
                 }
 
             }
+
+             */
             DBConnection.getInstance().closeConnection(connection);
             return notificationList;
         } catch (SQLException e) {
@@ -73,11 +86,12 @@ public class NotificationDAOImpl implements NotificationDAO {
     public void createNotification(Notification notification) throws SQLException {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String query = "insert into notifications (source_id, receiver_id,notification_status) values (?,?,?)";
+            String query = "insert into notifications (notification_type,source_id, receiver_id,notification_status) values (?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setInt(1, notification.getSource().getId());
-            statement.setInt(2, notification.getReceiver().getId());
-            statement.setInt(3,notification.getNotificationType());
+            statement.setInt(1, notification.getNotificationType());
+            statement.setInt(2, notification.getSource().getId());
+            statement.setInt(3, notification.getReceiver().getId());
+            statement.setInt(4,notification.getNotificationType());
             statement.execute();
             DBConnection.getInstance().closeConnection(connection);
         } catch (SQLException e) {

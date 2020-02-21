@@ -26,37 +26,21 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
     @Override
     public void sendFriendRequest(ClientService client, User receiver) throws RemoteException {
         friendRequestDAO.sendFriendRequest(client.getUser(), receiver);
-        Notification notification = new Notification(client.getUser(), receiver, NotificationType.FRIENDSHIP_REQUEST_RECEIVED);
-        NotificationDAO notificationDAO=new NotificationDAOImpl();
-        try {
-            notificationDAO.createNotification(notification);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        client.receiveNotification(new Notification(client.getUser(),receiver,NotificationType.FRIENDSHIP_REQUEST_RECEIVED));
     }
 
     @Override
     public void acceptFriendRequest(ClientService client, User sender) throws RemoteException {
         friendRequestDAO.acceptFriendRequest(client.getUser(), sender);
-        Notification notification = new Notification(client.getUser(), sender, NotificationType.FRIENDSHIP_ACCEPTED);
-        NotificationDAO notificationDAO=new NotificationDAOImpl();
-        try {
-            notificationDAO.createNotification(notification);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_ACCEPTED));
+
     }
 
     @Override
     public void rejectFriendRequest(ClientService client, User sender) throws RemoteException {
         friendRequestDAO.rejectFriendRequest(client.getUser(), sender);
-        Notification notification = new Notification(client.getUser(), sender, NotificationType.FRIENDSHIP_REJECTED);
-        NotificationDAO notificationDAO=new NotificationDAOImpl();
-        try {
-            notificationDAO.createNotification(notification);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_REJECTED));
+
     }
 
     public User searchByPhone(String phone) throws RemoteException, SQLException {
