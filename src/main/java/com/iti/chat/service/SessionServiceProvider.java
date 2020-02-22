@@ -1,16 +1,19 @@
 package com.iti.chat.service;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.iti.chat.dao.UserDAO;
 import com.iti.chat.dao.UserDAOImpl;
 import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 public class SessionServiceProvider extends UnicastRemoteObject implements SessionService {
     private Map<User, ClientService> managedSessions;
@@ -116,6 +119,15 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     public void register(User user, String password) throws SQLException, RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         userDAO.register(user, password);
+    }
+
+    public void uploadImage (RemoteInputStream remoteInputStream,ClientService clientService ,User user) throws IOException, SQLException {
+        String token = UUID.randomUUID().toString();
+        FileTransferServiceProvider fileTransferServiceProvider = FileTransferServiceProvider.getInstance();
+        String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token ;
+        fileTransferServiceProvider.uploadImage(remotePath, remoteInputStream, clientService);
+        UserDAOImpl userDAO = UserDAOImpl.getInstance();
+        userDAO.updateImage(remotePath,user );
     }
     
     public Map<User, ClientService> getClientService ()

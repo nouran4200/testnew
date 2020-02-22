@@ -83,6 +83,18 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+    @Override
+    public void updateImage(String url, User user) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String updateQuery = "UPDATE chatty.users " +
+                "SET image_uri = '" + url +
+                "' where user_id = " + user.getId();
+        Statement statement = connection.createStatement();
+        statement.execute(updateQuery);
+        DBConnection.getInstance().closeConnection(connection);
+
+    }
+
     public User findUserByPhone(String phone) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();

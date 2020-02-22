@@ -25,7 +25,6 @@ public class User implements Comparable<User>, Serializable {
         chatRooms = new ArrayList<>();
         country = "Egypt";
         status = UserStatus.OFFLINE;
-        remoteImagePath = "/Users/Hossiny/Downloads/blue-background.jpg";
     }
 
     public User (String firstName, String lastName, String phone, String email, int gender, String country){
