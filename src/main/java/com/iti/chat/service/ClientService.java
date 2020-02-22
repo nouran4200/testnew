@@ -6,6 +6,7 @@ import com.iti.chat.model.Message;
 import com.iti.chat.model.Notification;
 import com.iti.chat.model.User;
 
+import java.io.File;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
@@ -25,5 +26,6 @@ public interface ClientService extends Remote {
     void downloadImage(RemoteInputStream remoteInputStream) throws IOException;
     void recieveAnnouncment (String announcment)throws RemoteException;
     void userInfoDidChange(User user) throws RemoteException;
+    void uploadImage(File file, User user) throws IOException, NotBoundException, SQLException;
 
 }

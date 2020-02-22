@@ -20,25 +20,13 @@ import java.util.UUID;
 
 public class SessionServiceProvider extends UnicastRemoteObject implements SessionService {
     private Map<User, ClientService> managedSessions;
-    private Map<Integer, User> totalUsers;
+    private Map<Integer, User> onlineUsers;
     private static SessionServiceProvider instance;
 
     private SessionServiceProvider() throws RemoteException {
 
-        try {
-
-            managedSessions = new TreeMap<>();
-            totalUsers = new TreeMap<>();
-            //populating total users map with all the users in thew system fetched by user dao
-            UserDAOImpl.getInstance().getAllUsers().stream().forEach((element) -> {
-
-                totalUsers.put(element.getId(), element);
-
-            });
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        managedSessions = new TreeMap<>();
+        onlineUsers = new TreeMap<>();
     }
 
     public static SessionServiceProvider getInstance() throws RemoteException {
@@ -53,6 +41,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
         return managedSessions.get(user);
     }
+
+
 
     public int onlineUsers() {
         return managedSessions.size();
@@ -85,38 +75,23 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     public User login(String phone, String password, ClientService client) throws SQLException, RemoteException, NotBoundException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         User user = userDAO.login(phone, password);
-
-        //checking the list of all the friends of the user in order to update their status
-        //to have the contact list in the client side populated with the most recent update
-        //of his friends' statuses
-
-        //looping over all the friends to update their status
-        for (User friend : user.getFriends()) {
-
-            //checking the map of the online users if this friend is online
-
-            //if the user exists then get his recent status
-            if (managedSessions.get(friend) != null) {
-
-                User onlineFriend = managedSessions.get(friend).getUser();
-                friend.setStatus(onlineFriend.getStatus());
-
-            }
-
-            //else the friend's status is by default offline
-
-        }
         if (user != null) {
             //login process
-            user.setStatus(UserStatus.ONLINE);
+            onlineUsers.put(user.getId() , user);
             managedSessions.put(user, client);
-            totalUsers.put(user.getId() , user);
+            for(User friend : user.getFriends()) {
+                if(managedSessions.containsKey(friend)) {
+                    friend.setStatus(onlineUsers.get(friend.getId()).getStatus());
+                }
+            }
             client.setUser(user);
+            userInfoDidChange(user);
+            Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
+            notifyUsersFriends(notification);
         }
 
         //Notify all user's friends with his recent presence
-        Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
-        notifyUsersFriends(notification);
+
 
         return user;
     }
@@ -164,7 +139,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public void userInfoDidChange(User user) {
-        user.getFriends().stream().map(u -> getClient(u)).forEach(client -> {
+        user.getFriends().stream().filter(u -> u.getStatus() == UserStatus.ONLINE).
+                map(u -> getClient(u)).forEach(client -> {
             try {
                 client.userInfoDidChange(user);
             } catch (RemoteException e) {
