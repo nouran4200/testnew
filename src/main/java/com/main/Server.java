@@ -11,12 +11,12 @@ public class Server {
 
     public static void main(String[] args) throws SQLException {
         new Server();
-     /*  User shimaa= UserDAOImpl.getInstance().findUserByPhone("01111665936");
-       User alaa=UserDAOImpl.getInstance().findUserByPhone("01009893521");
-        User alyaa=UserDAOImpl.getInstance().findUserByPhone("01111665936");
-     //   FriendRequestDAOImpl.getInstance().sendFriendRequest(
-               //shimaa,alaa);
-     //  FriendRequestDAOImpl.getInstance().sendFriendRequest(alaa,shimaa);
+       User shimaa= UserDAOImpl.getInstance().findUserByPhone("01111540849");
+       User alaa=UserDAOImpl.getInstance().findUserByPhone("01009893562");
+        //User alyaa=UserDAOImpl.getInstance().findUserByPhone("01111665936");
+           FriendRequestDAOImpl.getInstance().sendFriendRequest(
+               shimaa,alaa);
+       FriendRequestDAOImpl.getInstance().sendFriendRequest(alaa,shimaa);
        /* FriendRequestDAOImpl.getInstance().sendFriendRequest(
                 alyaa,alaa);
         FriendRequestDAOImpl.getInstance().sendFriendRequest(alaa,alyaa);

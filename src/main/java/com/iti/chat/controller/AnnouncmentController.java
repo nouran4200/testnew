@@ -34,7 +34,7 @@ public class AnnouncmentController implements Initializable{
         sendButton.setOnAction(ae -> {
             try {
                 SessionServiceProvider ssp = SessionServiceProvider.getInstance();
-                ssp.getClientService().values().forEach(client -> {;
+                ssp.getClientService().values().forEach(client -> {
                     try {
                         client.recieveAnnouncment(textArea.getText());
                     } catch (RemoteException ex) {
