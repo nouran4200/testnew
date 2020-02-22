@@ -88,7 +88,7 @@ public class UserDAOImpl implements UserDAO {
         Connection connection = DBConnection.getInstance().getConnection();
         String updateQuery = "UPDATE chatty.users " +
                 "SET image_uri = '" + url +
-                "' where user_id = " + user.getId();
+                "' where phone = " + user.getPhone();
         Statement statement = connection.createStatement();
         statement.execute(updateQuery);
         DBConnection.getInstance().closeConnection(connection);
@@ -163,6 +163,7 @@ public class UserDAOImpl implements UserDAO {
                 ResultSet tableKeys = preparedStatement.getGeneratedKeys();
                 tableKeys.next();
                 user.setId(tableKeys.getInt(1));
+                System.out.println(user.getId());
                 DBConnection.getInstance().closeConnection(connection);
                 return user;
             } catch (SQLException e) {

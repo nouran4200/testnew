@@ -9,6 +9,7 @@ import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
@@ -58,10 +59,13 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     }
 
     @Override
-    public void updateInfo(User user) {
+    public void updateInfo(User user) throws RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         try {
             userDAO.updateInfo(user);
+            userInfoDidChange(user);
+            ClientService clientService = managedSessions.remove(user);
+            managedSessions.put(user, clientService);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -78,7 +82,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     }
 
     @Override
-    public User login(String phone, String password, ClientService client) throws SQLException, RemoteException {
+    public User login(String phone, String password, ClientService client) throws SQLException, RemoteException, NotBoundException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         User user = userDAO.login(phone, password);
 
@@ -154,9 +158,20 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token ;
         fileTransferServiceProvider.uploadImage(remotePath, remoteInputStream, clientService);
         UserDAOImpl userDAO = UserDAOImpl.getInstance();
-        userDAO.updateImage(remotePath,user );
+        userDAO.updateImage(remotePath,user);
     }
-    
+
+    @Override
+    public void userInfoDidChange(User user) {
+        user.getFriends().stream().map(u -> getClient(u)).forEach(client -> {
+            try {
+                client.userInfoDidChange(user);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     public Map<User, ClientService> getClientService ()
     {
         return managedSessions;
