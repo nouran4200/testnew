@@ -28,6 +28,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     private static ChatRoomServiceProvider instance;
     private ChatterBotSession chatterBotSession;
     ExecutorService executorService;
+    ClientService clientService;
     private ChatRoomServiceProvider() throws RemoteException {
         executorService = Executors.newFixedThreadPool(3);
     }
@@ -54,17 +55,46 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         room.getMessages().add(message);
         message.setChatRoom(room);
         broadcast(message, room, false);
-        for(int i=0;i<room.getUsers().size();i++){
+
+        ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
+        executorService.submit(() -> {
+                    for (int i = 0; i < room.getUsers().size(); i++) {
+
+                        if (!message.getSender().equals(room.getUsers().get(i))) {
+                            NotificationDAO notificationDAO = new NotificationDAOImpl();
+                            try {
+                               Notification notification = new Notification(message.getSender(), room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
+                                notificationDAO.createNotification(notification);
+                                 clientService.receiveNotification(notification);
+                                System.out.println("send Notification");
+                            } catch (SQLException | RemoteException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                    }
+                });
+
+        /*for(int i=0;i<room.getUsers().size();i++){
+
             if(!message.getSender().equals(room.getUsers().get(i))){
                 NotificationDAO notificationDAO=new NotificationDAOImpl();
                 try {
-                    notificationDAO.createNotification(new Notification(message.getSender(),room.getUsers().get(i),NotificationType.MESSAGE_RECEIVED));
+                    notification=new  Notification(message.getSender(),room.getUsers().get(i),NotificationType.MESSAGE_RECEIVED);
+                    notificationDAO.createNotification(notification);
+                   // clientService.receiveNotification(notification);
+                    System.out.println("send Notification");
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
 
         }
+
+         */
+
+
 
     }
 

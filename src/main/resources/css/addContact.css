@@ -1,0 +1,75 @@
+.main_button {
+    -fx-font: bold 20px "Calibri";
+    -fx-background-color:  #4c84ff;
+    -fx-background-radius: 8,7,6;
+    -fx-text-alignment: center;
+    -fx-text-fill:  #ffffff;
+}
+.heading_label {
+    -fx-text-fill: #4c84ff;
+    -fx-font:  50px "Calibri";
+
+}
+.normal_label
+{
+    -fx-font:  24px "Calibri";
+
+}
+
+.warningMsg {
+
+    -fx-fill :  #fc0303;
+    -fx-font-color:  #fc0303;
+    -fx-font: 20px "Calibri";
+    -fx-text-alignment: left;
+
+}
+.custom-radio-button{
+    -jfx-selected-color: #4c84ff;
+    -jfx-unselected-color: #4c84ff;
+
+}
+.background {
+
+    -fx-background-color: #ffffff;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+}
+
+.radio-button:selected .radio .dot {
+    -fx-background-color: red;
+    -fx-background-insets: 0;
+}
+.secondaryBackgound {
+    -fx-background-color:  #4c84ff;
+}
+
+.text-field {
+    -fx-background-radius: 8,7,6;
+}
+
+
+.button:hover
+{
+    -fx-background-color:#3158ad;
+
+}
+
+.hyperlink
+{
+    -fx-underline : true;
+    -fx-font: 15px "Calibri";
+    -fx-text-fill : #00278e;
+
+}
+
+
+.button:hover
+{
+    -fx-background-color:#3158ad;
+
+}
+.login_container {
+
+    -fx-background-color: white;
+}

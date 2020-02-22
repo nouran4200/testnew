@@ -1,48 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import java.net.URL?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="211.0" styleClass="background_sideBar" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AdminbarController">
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import java.net.URL?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<HBox alignment="TOP_CENTER" fillHeight="false" prefHeight="50.0" spacing="20.0" BorderPane.alignment="CENTER"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AdminbarController">
+
     <children>
-        <fx:include source="serviceBar.fxml" />
-        <JFXButton fx:id="serviceButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Service" textFill="WHITE">
-            <VBox.margin>
-                <Insets left="10.0" top="15.0" />
-            </VBox.margin>
-            <font>
-                <Font name="Arial" size="16.0" />
-            </font>
+
+        <JFXToggleButton text="Service" alignment="TOP_CENTER" fx:id="serviceButton" styleClass="toggleButton">
+        </JFXToggleButton>
+        <JFXButton text="Statistics" styleClass="menuButton" prefHeight="60" fx:id="StatsButton">
+            <graphic>
+                <ImageView fitHeight="40" fitWidth="40">
+                    <Image url="@../images/icons8-statistics-64.png"/>
+                </ImageView>
+            </graphic>
         </JFXButton>
-        <JFXButton fx:id="StatsButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Stastictics" textFill="WHITE">
-            <VBox.margin>
-                <Insets left="10.0" top="15.0" />
-            </VBox.margin>
-            <font>
-                <Font name="Arial" size="16.0" />
-            </font>
+        <JFXButton text="Announcement" styleClass="menuButton" prefHeight="60" fx:id="announceButton">
+            <graphic>
+                <ImageView fitHeight="40" fitWidth="40">
+                    <Image url="@../images/icons8-commercial-64.png"/>
+                </ImageView>
+            </graphic>
         </JFXButton>
-        <JFXButton fx:id="announcButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Announcment" textFill="WHITE">
-            <VBox.margin>
-                <Insets left="10.0" top="15.0" />
-            </VBox.margin>
-            <font>
-                <Font name="Arial" size="16.0" />
-            </font>
-        </JFXButton>
-        <JFXButton fx:id="addContactButton" prefHeight="43.0" prefWidth="142.0" style="-fx-background-color: #2196f3;" text="Add Contact" textFill="WHITE">
-            <VBox.margin>
-                <Insets left="10.0" top="15.0" />
-            </VBox.margin>
-            <font>
-                <Font name="Arial" size="16.0" />
-            </font>
+        <JFXButton text="Add Contact" styleClass="menuButton" prefHeight="60" fx:id="addContactButton">
+            <graphic>
+                <ImageView fitHeight="35" fitWidth="35">
+                    <Image url="@../images/icons8-new-contact-40.png"/>
+                </ImageView>
+            </graphic>
         </JFXButton>
     </children>
+
+
     <stylesheets>
-        <URL value="@../css/styleSheet.css" />
+        <URL value="@../css/styleSheet.css"></URL>
+        <URL value="@../css/charts.css"></URL>
     </stylesheets>
-</VBox>
+</HBox>

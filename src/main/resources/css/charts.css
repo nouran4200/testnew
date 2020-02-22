@@ -1,0 +1,144 @@
+.chart {
+    -fx-padding: 5px;
+}
+.chart-content {
+    -fx-padding: 10px;
+}
+.chart-title {
+    -fx-font-size: 1.4em;
+}
+.chart-legend {
+   -fx-background-color: ladder(-fx-background, derive(-fx-box-border, -10%) 50%, derive(-fx-box-border, 10%) 51%),
+                         ladder(-fx-background, derive(-fx-control-inner-background, 5%) 50%, derive(-fx-control-inner-background, -5%) 51%);
+   -fx-background-insets: 0,1;
+   -fx-background-radius: 6,5;
+   -fx-padding: 6px;
+}
+
+/* ====== AXIS ============================================================================ */
+.axis {
+    -fx-tick-label-font-size: 0.833333em;  /* 10 pix */
+    -fx-tick-label-fill: -fx-text-background-color;
+}
+.axis:top {
+    -fx-border-color: transparent transparent #666666 transparent;
+}
+.axis:right {
+    -fx-border-color: transparent transparent transparent #666666;
+}
+.axis:bottom {
+    -fx-border-color: #666666 transparent transparent transparent;
+}
+.axis:left {
+    -fx-border-color: transparent #666666 transparent transparent;
+}
+.axis-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: #666666;
+}
+.axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: #AAAAAA;
+}
+
+.axis .text {
+  -fx-font-smoothing-type: lcd;
+}
+
+/* ====== CHART PLOT BACKGROUND =========================================================== */
+.chart-plot-background {
+    -fx-background-color: #f5f5f5;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: #dddddd;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #dddddd;
+}
+.chart-alternative-column-fill {
+    -fx-fill: #eeeeee;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.chart-alternative-row-fill {
+    -fx-fill: #eeeeee;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.chart-vertical-zero-line {
+    -fx-stroke: #999999;
+}
+.chart-horizontal-zero-line {
+    -fx-stroke: #999999;
+}
+
+.chart-bar {
+    -fx-bar-fill: #22bad9;
+    -fx-background-color: linear-gradient(derive(-fx-bar-fill,-30%), derive(-fx-bar-fill,-40%)),
+                          linear-gradient(derive(-fx-bar-fill,80%), derive(-fx-bar-fill, 0%)),
+                          linear-gradient(derive(-fx-bar-fill,30%), derive(-fx-bar-fill,-10%));
+    -fx-background-insets: 0,1,2;
+    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
+}
+
+.negative.chart-bar {
+   -fx-background-color: linear-gradient(to top, derive(-fx-bar-fill,-30%), derive(-fx-bar-fill,-40%)),
+                          linear-gradient(to top, derive(-fx-bar-fill, 80%), derive(-fx-bar-fill,0%)),
+                          linear-gradient(to top, derive(-fx-bar-fill,30%), derive(-fx-bar-fill,-10%));
+   -fx-background-radius: 0 0 5 5, 0 0 4 4, 0 0 3 3;
+}
+.bar-chart:horizontal .chart-bar, .stacked-bar-chart:horizontal .chart-bar {
+    -fx-background-color: linear-gradient(to left, derive(-fx-bar-fill,-30%), derive(-fx-bar-fill,-40%)),
+                          linear-gradient(to left, derive(-fx-bar-fill,80%), derive(-fx-bar-fill, 0%)),
+                          linear-gradient(to left, derive(-fx-bar-fill,30%), derive(-fx-bar-fill,-10%));
+    -fx-background-radius: 0 5 5 0, 0 4 4 0, 0 3 3 0;
+}
+.bar-chart:horizontal .negative.chart-bar, .stacked-bar-chart:horizontal .negative.chart-bar {
+    -fx-background-color: linear-gradient(to right, derive(-fx-bar-fill,-30%), derive(-fx-bar-fill,-40%)),
+                          linear-gradient(to right, derive(-fx-bar-fill, 80%), derive(-fx-bar-fill, 0%)),
+                          linear-gradient(to right, derive(-fx-bar-fill,30%), derive(-fx-bar-fill,-10%));
+    -fx-background-radius: 5 0 0 5, 4 0 0 4, 3 0 0 3;
+}
+.default-color0.chart-bar { -fx-bar-fill: #f9d900; }
+.default-color1.chart-bar { -fx-bar-fill: #a9e200; }
+.default-color2.chart-bar { -fx-bar-fill: #22bad9; }
+.default-color3.chart-bar { -fx-bar-fill: #0181e2; }
+.default-color4.chart-bar { -fx-bar-fill: #2f357f; }
+.default-color5.chart-bar { -fx-bar-fill: #860061; }
+.default-color6.chart-bar { -fx-bar-fill: #c62b00; }
+.default-color7.chart-bar { -fx-bar-fill: #ff5700; }
+.bar-legend-symbol {
+    -fx-padding: 8px;
+}
+/* ====== PIE CHART ============================================================== */
+.chart-pie {
+    -fx-pie-color: #2f357f;
+    -fx-background-color: radial-gradient(radius 100%, derive(-fx-pie-color,55%), derive(-fx-pie-color,-20%));
+    -fx-background-insets: 0;
+    -fx-border-color: derive(-fx-pie-color,-30%);
+}
+.chart-pie-label {
+    -fx-padding: 3px;
+    -fx-fill: -fx-text-base-color;
+}
+.chart-pie-label-line {
+    -fx-stroke: #aaaaaa;
+    -fx-fill: #aaaaaa;
+}
+.default-color0.chart-pie { -fx-pie-color: #f9d900; }
+.default-color1.chart-pie { -fx-pie-color: #a9e200; }
+.default-color2.chart-pie { -fx-pie-color: #22bad9; }
+.default-color3.chart-pie { -fx-pie-color: #0181e2; }
+.default-color4.chart-pie { -fx-pie-color: #2f357f; }
+.default-color5.chart-pie { -fx-pie-color: #860061; }
+.default-color6.chart-pie { -fx-pie-color: #c62b00; }
+.default-color7.chart-pie { -fx-pie-color: #ff5700; }
+.negative.chart-pie {
+    -fx-pie-color: transparent;
+    -fx-background-color: white;
+}
+.pie-legend-symbol.chart-pie {
+    -fx-background-radius: 8px;
+    -fx-padding: 8px;
+    -fx-border-color: null;
+}

@@ -5,19 +5,18 @@
  */
 package com.iti.chat.controller;
 
+import com.iti.chat.model.Notification;
 import com.iti.chat.service.SessionServiceProvider;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
-import java.io.IOException;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 
 /**
  *
@@ -37,7 +36,6 @@ public class AnnouncmentController implements Initializable{
                 SessionServiceProvider ssp = SessionServiceProvider.getInstance();
                 ssp.getClientService().values().forEach(client -> {;
                     try {
-                        System.out.println(client);
                         client.recieveAnnouncment(textArea.getText());
                     } catch (RemoteException ex) {
                         Logger.getLogger(AnnouncmentController.class.getName()).log(Level.SEVERE, null, ex);

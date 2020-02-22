@@ -1,5 +1,7 @@
 package com.iti.chat.dao;
 
+import com.iti.chat.model.Notification;
+import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
 import com.iti.chat.service.DBConnection;
 import com.iti.chat.util.adapter.UserAdapter;
@@ -23,11 +25,14 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
     @Override
     public void sendFriendRequest(User sender, User receiver) {
         List<User> pendingFriends = pendingFriendRequests(sender);
+        NotificationDAO notificationDAO=new NotificationDAOImpl();
+
         if(pendingFriends.contains(receiver)) {
             acceptFriendRequest(sender, receiver);
         }
         else {
             try {
+
                 Connection connection = DBConnection.getInstance().getConnection();
                 String query = "insert into friend_requests (sender_id, receiver_id) values (?,?)";
                 PreparedStatement statement = connection.prepareStatement(query);
@@ -35,6 +40,9 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
                 statement.setInt(2, receiver.getId());
                 statement.execute();
                 DBConnection.getInstance().closeConnection(connection);
+                Notification notification = new Notification(sender, receiver, 3);
+                notificationDAO.createNotification(notification);
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -44,6 +52,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
     @Override
     public void acceptFriendRequest(User receiver, User sender) {
         try {
+            NotificationDAO notificationDAO=new NotificationDAOImpl();
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "update friend_requests set status = 1 where sender_id = ? and receiver_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -53,6 +62,9 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
             sender.getFriends().add(receiver);
             receiver.getFriends().add(sender);
             DBConnection.getInstance().closeConnection(connection);
+            Notification notification = new Notification(sender, receiver, NotificationType.FRIENDSHIP_REQUEST_RECEIVED);
+            notificationDAO.createNotification(notification);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,6 +73,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
     @Override
     public void rejectFriendRequest(User receiver, User sender) {
         try {
+            NotificationDAO notificationDAO=new NotificationDAOImpl();
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "update friend_requests set status = 0 where sender_id = ? and receiver_id = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -68,6 +81,8 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
             statement.setInt(2, receiver.getId());
             statement.execute();
             DBConnection.getInstance().closeConnection(connection);
+            Notification notification = new Notification(sender, receiver, NotificationType.FRIENDSHIP_REJECTED);
+            notificationDAO.createNotification(notification);
         } catch (SQLException e) {
             e.printStackTrace();
         }

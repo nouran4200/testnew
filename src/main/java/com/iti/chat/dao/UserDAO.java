@@ -13,4 +13,6 @@ public interface UserDAO {
     public List<User> getAllUsers() throws SQLException;
     public void updateUserPassword(User user) throws SQLException;
     public void updateImage(String url , User user)throws SQLException;
+    public List<User> searchByPhone(String searchQuery) throws SQLException;
+    public User findUserById(int id)throws SQLException;
 }
