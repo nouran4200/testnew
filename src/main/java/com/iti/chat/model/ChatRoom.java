@@ -9,7 +9,7 @@ public class ChatRoom implements Serializable{
     private List<User> users;
     private List<Message> messages;
     private String name;
-    static int counter = 0;
+    static int counter = 1;
 
     public ChatRoom() {
         id = counter++;
