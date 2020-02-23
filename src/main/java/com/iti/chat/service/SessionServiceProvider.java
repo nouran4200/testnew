@@ -86,8 +86,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             }
             client.setUser(user);
             userInfoDidChange(user);
-            Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
+           /* Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
             notifyUsersFriends(notification);
+
+            */
         }
 
         //Notify all user's friends with his recent presence
@@ -99,9 +101,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     private void notifyUsersFriends(Notification notification){
 
         List<User> friends = notification.getSource().getFriends();
-
         for(User friend : friends){
-
+            System.out.println("online size"+friends.size());
             if (managedSessions.get(friend) != null){
 
                 try {
@@ -120,7 +121,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     public void logout(User user) {
         managedSessions.remove(user);
         user.setStatus(UserStatus.OFFLINE);
-        notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
+        userInfoDidChange(user);
+       // notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
     }
 
     public void register(User user, String password) throws SQLException, RemoteException {
@@ -143,9 +145,13 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
                 map(u -> getClient(u)).forEach(client -> {
             try {
                 client.userInfoDidChange(user);
+
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+            Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
+            notifyUsersFriends(notification);
         });
     }
 
