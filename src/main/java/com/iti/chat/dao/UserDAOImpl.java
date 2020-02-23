@@ -2,6 +2,7 @@ package com.iti.chat.dao;
 
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.User;
+import com.iti.chat.model.UserStatus;
 import com.iti.chat.service.DBConnection;
 import com.iti.chat.util.StringUtil;
 import com.iti.chat.util.adapter.UserAdapter;
@@ -83,6 +84,18 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+    @Override
+    public void updateImage(String url, User user) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String updateQuery = "UPDATE chatty.users " +
+                "SET image_uri = '" + url +
+                "' where phone = " + user.getPhone();
+        Statement statement = connection.createStatement();
+        statement.execute(updateQuery);
+        DBConnection.getInstance().closeConnection(connection);
+
+    }
+
     public User findUserByPhone(String phone) {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
@@ -127,6 +140,7 @@ public class UserDAOImpl implements UserDAO {
         if (user != null) {
             FriendRequestDAO friendRequestDAO = FriendRequestDAOImpl.getInstance();
             user.setFriends(friendRequestDAO.getFriends(user));
+            user.setStatus(UserStatus.ONLINE);
         }
         DBConnection.getInstance().closeConnection(connection);
         return user;
@@ -151,6 +165,7 @@ public class UserDAOImpl implements UserDAO {
                 ResultSet tableKeys = preparedStatement.getGeneratedKeys();
                 tableKeys.next();
                 user.setId(tableKeys.getInt(1));
+                System.out.println(user.getId());
                 DBConnection.getInstance().closeConnection(connection);
                 return user;
             } catch (SQLException e) {

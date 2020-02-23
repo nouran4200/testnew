@@ -5,23 +5,18 @@ import com.google.code.chatterbotapi.ChatterBotFactory;
 import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
-import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.iti.chat.dao.NotificationDAO;
 import com.iti.chat.dao.NotificationDAOImpl;
 import com.iti.chat.model.*;
-import com.iti.chat.model.ChatRoom;
-import com.iti.chat.model.Message;
-import com.iti.chat.model.User;
-import com.iti.chat.model.UserStatus;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ChatRoomServiceProvider extends UnicastRemoteObject implements ChatRoomService{
@@ -29,8 +24,10 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     private ChatterBotSession chatterBotSession;
     ExecutorService executorService;
     ClientService clientService;
+    Map<Integer, ChatRoom> chatRooms;
     private ChatRoomServiceProvider() throws RemoteException {
         executorService = Executors.newFixedThreadPool(3);
+        chatRooms = new HashMap<>();
     }
     public static ChatRoomServiceProvider getInstance() throws RemoteException {
         if(instance == null) {
@@ -41,16 +38,34 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     @Override
     public ChatRoom createNewChatRoom(List<User> users) {
+        for(ChatRoom chatRoom : chatRooms.values()) {
+            if(chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
+                return chatRoom;
+            }
+        }
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setUsers(users);
         String name = users.stream().map(user -> user.getFirstName()).collect(Collectors.joining(","));
         chatRoom.setName(name);
         users.forEach(user -> user.getChatRooms().add(chatRoom));
+        chatRooms.put(chatRoom.getId(), chatRoom);
         return chatRoom;
     }
 
     @Override
-    public void sendMessage(Message message, ChatRoom room) throws RemoteException {
+    public List<ChatRoom> getGroupChatRooms(User user) {
+        Predicate<ChatRoom> isGroupChat = (ChatRoom room) -> room.getUsers().size() > 2;
+        Predicate<ChatRoom> belongsToUser = (ChatRoom room) -> room.getUsers().contains(user);
+        return chatRooms.values().stream().filter(belongsToUser.and(isGroupChat)).collect(Collectors.toList());
+    }
+
+    public ChatRoom getChatRoom(int roomId) {
+        return chatRooms.get(roomId);
+    }
+
+    @Override
+    public void sendMessage(Message message, int roomId) throws RemoteException {
+        ChatRoom room = chatRooms.get(roomId);
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         room.getMessages().add(message);
         message.setChatRoom(room);
@@ -71,8 +86,6 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                                 e.printStackTrace();
                             }
                         }
-
-
                     }
                 });
 
@@ -99,7 +112,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     }
 
     @Override
-    public void sendFile(Message message, ChatRoom room, RemoteInputStream remoteInputStream) throws IOException {
+    public void sendFile(Message message, int roomId, RemoteInputStream remoteInputStream) throws IOException {
         String token = UUID.randomUUID().toString();
         FileTransferServiceProvider fileTransferServiceProvider = FileTransferServiceProvider.getInstance();
         ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
@@ -108,7 +121,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                 String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token + message.getContent();
                 fileTransferServiceProvider.uploadFile(remotePath, remoteInputStream, clientService);
                 message.setRemotePath(remotePath);
-                sendMessage(message, room);
+                sendMessage(message, roomId);
             } catch (IOException e) {
                 e.printStackTrace();
             }
