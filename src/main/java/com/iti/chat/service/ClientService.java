@@ -24,7 +24,7 @@ public interface ClientService extends Remote {
     void didSendNBytes(long n) throws RemoteException;
     void downloadFile(RemoteInputStream remoteInputStream) throws IOException;
     void downloadImage(RemoteInputStream remoteInputStream) throws IOException;
-    void recieveAnnouncment (String announcment)throws RemoteException;
+    void recieveAnnouncment (Message announcment)throws RemoteException;
     void userInfoDidChange(User user) throws RemoteException;
     void uploadImage(File file, User user) throws IOException, NotBoundException, SQLException;
 
