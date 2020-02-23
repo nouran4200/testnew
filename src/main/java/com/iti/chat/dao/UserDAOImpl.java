@@ -2,6 +2,7 @@ package com.iti.chat.dao;
 
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.User;
+import com.iti.chat.model.UserStatus;
 import com.iti.chat.service.DBConnection;
 import com.iti.chat.util.StringUtil;
 import com.iti.chat.util.adapter.UserAdapter;
@@ -139,6 +140,7 @@ public class UserDAOImpl implements UserDAO {
         if (user != null) {
             FriendRequestDAO friendRequestDAO = FriendRequestDAOImpl.getInstance();
             user.setFriends(friendRequestDAO.getFriends(user));
+            user.setStatus(UserStatus.ONLINE);
         }
         DBConnection.getInstance().closeConnection(connection);
         return user;
