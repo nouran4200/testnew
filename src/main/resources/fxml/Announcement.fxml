@@ -6,17 +6,15 @@
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
 <GridPane fx:id="motherGridPane" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AnnouncmentController">
     <children>
         <HBox alignment="CENTER" spacing="20" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
@@ -33,31 +31,37 @@
                         <Font name="Times New Roman Italic" size="18.0" />
                     </font>
                 </JFXToggleButton>
-                <JFXComboBox fx:id="sizeComboBox" prefHeight="25.0" minWidth="73.0" visibleRowCount="5">
+                <JFXComboBox fx:id="sizeComboBox" minWidth="73.0" prefHeight="25.0" visibleRowCount="5">
                 </JFXComboBox>
 
                 <JFXColorPicker id="fontColorPicker" fx:id="fontColorPicker" prefHeight="26.0" prefWidth="90.0" promptText="choose font color ..." style="-fx-color-label-visible: false;" />
                 <JFXComboBox fx:id="fontComboBox" prefHeight="26.0" prefWidth="200.0" visibleRowCount="5" />
             </children>
         </HBox>
-        <HBox id="messageAreaPane" fx:id="messageAreaPane"  maxHeight="300" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
-            <children>
-                <TextArea id="msgTxtField" fx:id="msgTxtField"  promptText="Type your message ... " wrapText="true" >
-                    <font>
-                        <Font name="Arial" size="14.0" />
-                    </font>
-                    <HBox.margin>
-                        <Insets bottom="10" left="20" top="10" right="20"/>
-                    </HBox.margin>
-                </TextArea>
-            </children>
+        <StackPane alignment="CENTER" maxHeight="300" GridPane.rowIndex="1">
+            <HBox id="messageAreaPane" fx:id="messageAreaPane" maxWidth="500">
+                <children>
+                    <TextArea id="msgTxtField" fx:id="msgTxtField" promptText="Type your message ... " wrapText="true">
+                        <font>
+                            <Font name="Arial" size="14.0" />
+                        </font>
+                        <HBox.margin>
+                            <Insets bottom="10" left="20" right="20" top="10" />
+                        </HBox.margin>
+                    </TextArea>
+                </children>
 
-        </HBox>
+            </HBox>
+        </StackPane>
+
         <VBox alignment="CENTER" GridPane.rowIndex="2">
             <children>
-            <JFXButton text="Send" >
+            <JFXButton fx:id="sendButton" prefHeight="37.0" prefWidth="105.0" style="-fx-background-color: #3385ff;" text="Send">
             </JFXButton>
             </children>
+         <GridPane.margin>
+            <Insets top="20.0" />
+         </GridPane.margin>
         </VBox>
 
 
@@ -75,6 +79,7 @@
     <rowConstraints>
         <RowConstraints />
         <RowConstraints />
+      <RowConstraints />
     </rowConstraints>
 
 </GridPane>
