@@ -1,21 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXTextArea?>
-<?import javafx.scene.layout.AnchorPane?>
-
-
-<?import javafx.scene.layout.VBox?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="383.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.iti.chat.controller.AnnouncmentController">
+<?import com.jfoenix.controls.JFXColorPicker?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<GridPane fx:id="motherGridPane" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AnnouncmentController">
     <children>
-        <VBox alignment="CENTER" spacing="20">
-            <JFXTextArea prefHeight="150.0" prefWidth="350.0" promptText="Announcement" unFocusColor="#2196f3"
-                         fx:id="textArea"/>
-            <JFXButton fx:id="sendButton" prefHeight="47.0" prefWidth="100.0"
-                       style="-fx-background-color: #2196f3;" text="Send" textFill="WHITE" styleClass="sendButton"/>
-        </VBox>
-    </children>
+        <HBox alignment="CENTER" spacing="20" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
+            <children>
 
-</AnchorPane>
+                <JFXToggleButton fx:id="boldButton" prefHeight="52.0" prefWidth="70.0" text="B">
+                    <font>
+                        <Font name="Times New Roman Bold" size="18.0" />
+                    </font>
+                </JFXToggleButton>
+
+                <JFXToggleButton fx:id="italicButton" prefHeight="63.0" prefWidth="70" text="I">
+                    <font>
+                        <Font name="Times New Roman Italic" size="18.0" />
+                    </font>
+                </JFXToggleButton>
+                <JFXComboBox fx:id="sizeComboBox" prefHeight="25.0" minWidth="73.0" visibleRowCount="5">
+                </JFXComboBox>
+
+                <JFXColorPicker id="fontColorPicker" fx:id="fontColorPicker" prefHeight="26.0" prefWidth="90.0" promptText="choose font color ..." style="-fx-color-label-visible: false;" />
+                <JFXComboBox fx:id="fontComboBox" prefHeight="26.0" prefWidth="200.0" visibleRowCount="5" />
+            </children>
+        </HBox>
+
+        <HBox id="messageAreaPane" fx:id="messageAreaPane"  maxHeight="300" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+            <children>
+                <TextArea id="msgTxtField" fx:id="msgTxtField"  promptText="Type your message ... " wrapText="true" >
+                    <font>
+                        <Font name="Arial" size="14.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets bottom="10" left="20" top="10" right="20"/>
+                    </HBox.margin>
+                </TextArea>
+            </children>
+
+        </HBox>
+    </children>
+    <stylesheets>
+        <URL value="@../css/chatroom_stylesheet.css">
+
+        </URL>
+    </stylesheets>
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+    </rowConstraints>
+
+</GridPane>
