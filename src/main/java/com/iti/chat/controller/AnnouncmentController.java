@@ -62,7 +62,6 @@ public class AnnouncmentController implements Initializable{
     
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-
         style = new MessageStyle();
         fontComboBox.getItems().addAll(Font.getFontNames());
         sizeComboBox.getItems().addAll(IntStream.rangeClosed(8, 28).boxed().collect(Collectors.toList()));
@@ -122,8 +121,28 @@ public class AnnouncmentController implements Initializable{
             } else {
                 style.setFontWeight(FontWeight.LIGHT.name());
             }
+
             applyStyle();
         });
+
+
+        sendButton.setOnAction(ae -> {
+            try {
+                SessionServiceProvider ssp = SessionServiceProvider.getInstance();
+                ssp.getClientService().values().forEach(client -> {
+                    try {
+                        client.recieveAnnouncment(textArea.getText());
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(AnnouncmentController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    textArea.clear();
+                });
+
+            } catch (RemoteException ex) {
+                Logger.getLogger(AnnouncmentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+
 
     }
 

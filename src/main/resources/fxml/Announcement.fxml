@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 <GridPane fx:id="motherGridPane" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AnnouncmentController">
     <children>
         <HBox alignment="CENTER" spacing="20" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
@@ -39,7 +40,6 @@
                 <JFXComboBox fx:id="fontComboBox" prefHeight="26.0" prefWidth="200.0" visibleRowCount="5" />
             </children>
         </HBox>
-
         <HBox id="messageAreaPane" fx:id="messageAreaPane"  maxHeight="300" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
             <children>
                 <TextArea id="msgTxtField" fx:id="msgTxtField"  promptText="Type your message ... " wrapText="true" >
@@ -53,7 +53,17 @@
             </children>
 
         </HBox>
+        <VBox alignment="CENTER" GridPane.rowIndex="2">
+            <children>
+            <JFXButton text="Send" >
+            </JFXButton>
+            </children>
+        </VBox>
+
+
+
     </children>
+
     <stylesheets>
         <URL value="@../css/chatroom_stylesheet.css">
 
