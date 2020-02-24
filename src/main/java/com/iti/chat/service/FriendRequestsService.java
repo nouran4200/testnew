@@ -11,6 +11,7 @@ public interface FriendRequestsService  extends Remote {
     void sendFriendRequest(ClientService client, User receiver) throws RemoteException;
     void acceptFriendRequest(ClientService client, User sender) throws RemoteException;
     void rejectFriendRequest(ClientService client, User sender) throws RemoteException;
-    User searchByPhone(String phone) throws RemoteException, SQLException;
+    User findUserByPhone(String phone) throws RemoteException, SQLException;
+    List<User> searchByPhone(String phone) throws RemoteException, SQLException;
     List<User> pendingFriendRequests(ClientService client) throws RemoteException;
 }

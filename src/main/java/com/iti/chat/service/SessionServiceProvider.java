@@ -22,6 +22,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     private Map<User, ClientService> managedSessions;
     private Map<Integer, User> onlineUsers;
     private static SessionServiceProvider instance;
+    boolean changeStatus=false;
 
     private SessionServiceProvider() throws RemoteException {
 
@@ -51,9 +52,13 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     @Override
     public void updateInfo(User user) throws RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
+        System.out.println("update Info"+user);
         try {
             userDAO.updateInfo(user);
-            userInfoDidChange(user);
+            Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
+            notifyUsersFriends(notification);
+             userInfoDidChange(user);
+             changeStatus=true;
             ClientService clientService = managedSessions.remove(user);
             managedSessions.put(user, clientService);
         } catch (SQLException e) {
@@ -88,6 +93,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             userInfoDidChange(user);
             Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
             notifyUsersFriends(notification);
+
+
         }
 
         //Notify all user's friends with his recent presence
@@ -99,9 +106,9 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     private void notifyUsersFriends(Notification notification){
 
         List<User> friends = notification.getSource().getFriends();
-
         for(User friend : friends){
-
+            System.out.println("online size"+friends.size());
+            System.out.println("notify user freinds "+friend);
             if (managedSessions.get(friend) != null){
 
                 try {
@@ -120,7 +127,8 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     public void logout(User user) {
         managedSessions.remove(user);
         user.setStatus(UserStatus.OFFLINE);
-        notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
+        userInfoDidChange(user);
+       // notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
     }
 
     public void register(User user, String password) throws SQLException, RemoteException {
@@ -143,9 +151,17 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
                 map(u -> getClient(u)).forEach(client -> {
             try {
                 client.userInfoDidChange(user);
+
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
+           /* System.out.println("userInfoChange sender"+user);
+
+
+            */
+
+
         });
     }
 

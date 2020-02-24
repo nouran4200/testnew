@@ -39,7 +39,8 @@ public class HomeController implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(HomeController.class.getResource("/fxml/Announcement.fxml"));
-                Parent parent = loader.load();
+                Parent parent = loader
+                        .load();
                 root.setCenter(parent);
             } catch (IOException ex) {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);

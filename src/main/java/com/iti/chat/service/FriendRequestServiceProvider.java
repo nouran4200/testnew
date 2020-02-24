@@ -43,10 +43,17 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
 
     }
 
-    public User searchByPhone(String phone) throws RemoteException, SQLException {
+    public User findUserByPhone(String phone) throws RemoteException, SQLException {
         UserDAO userDAO = UserDAOImpl.getInstance();
         return userDAO.findUserByPhone(phone);
     }
+
+    @Override
+    public List<User> searchByPhone(String phone) throws RemoteException, SQLException {
+        UserDAO userDAO = UserDAOImpl.getInstance();
+        return userDAO.searchByPhone(phone);
+    }
+
 
     @Override
     public List<User> pendingFriendRequests(ClientService client) throws RemoteException {
