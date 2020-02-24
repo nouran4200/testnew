@@ -4,6 +4,7 @@ import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
 import com.healthmarketscience.rmiio.RemoteInputStreamServer;
 import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
+import com.iti.chat.model.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -74,9 +75,9 @@ public class FileTransferServiceProvider extends UnicastRemoteObject implements 
     }
 
     @Override
-    public void downloadImage(String remoteLocation, ClientService clientService) throws IOException {
-        InputStream inputStream = new FileInputStream(remoteLocation);
+    public void downloadImage(User user, ClientService clientService) throws IOException {
+        InputStream inputStream = new FileInputStream(user.getRemoteImagePath());
         RemoteInputStreamServer remoteFileData = new SimpleRemoteInputStream(inputStream);
-        clientService.downloadImage(remoteFileData);
+        clientService.downloadImage(user, remoteFileData);
     }
 }
