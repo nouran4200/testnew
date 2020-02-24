@@ -22,6 +22,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     private Map<User, ClientService> managedSessions;
     private Map<Integer, User> onlineUsers;
     private static SessionServiceProvider instance;
+    boolean changeStatus=false;
 
     private SessionServiceProvider() throws RemoteException {
 
@@ -51,9 +52,13 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     @Override
     public void updateInfo(User user) throws RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
+        System.out.println("update Info"+user);
         try {
             userDAO.updateInfo(user);
-            userInfoDidChange(user);
+            Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
+            notifyUsersFriends(notification);
+             userInfoDidChange(user);
+             changeStatus=true;
             ClientService clientService = managedSessions.remove(user);
             managedSessions.put(user, clientService);
         } catch (SQLException e) {
@@ -86,10 +91,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             }
             client.setUser(user);
             userInfoDidChange(user);
-           /* Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
+            Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
             notifyUsersFriends(notification);
 
-            */
+
         }
 
         //Notify all user's friends with his recent presence
@@ -103,6 +108,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         List<User> friends = notification.getSource().getFriends();
         for(User friend : friends){
             System.out.println("online size"+friends.size());
+            System.out.println("notify user freinds "+friend);
             if (managedSessions.get(friend) != null){
 
                 try {
@@ -150,8 +156,12 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            Notification notification = new Notification(user , null , NotificationType.STATUS_UPDATE);
-            notifyUsersFriends(notification);
+           /* System.out.println("userInfoChange sender"+user);
+
+
+            */
+
+
         });
     }
 
