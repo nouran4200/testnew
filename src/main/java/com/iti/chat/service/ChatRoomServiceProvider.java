@@ -19,18 +19,20 @@ import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class ChatRoomServiceProvider extends UnicastRemoteObject implements ChatRoomService{
+public class ChatRoomServiceProvider extends UnicastRemoteObject implements ChatRoomService {
     private static ChatRoomServiceProvider instance;
     private ChatterBotSession chatterBotSession;
     ExecutorService executorService;
     ClientService clientService;
     Map<Integer, ChatRoom> chatRooms;
+
     private ChatRoomServiceProvider() throws RemoteException {
         executorService = Executors.newFixedThreadPool(3);
         chatRooms = new HashMap<>();
     }
+
     public static ChatRoomServiceProvider getInstance() throws RemoteException {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ChatRoomServiceProvider();
         }
         return instance;
@@ -38,8 +40,8 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     @Override
     public ChatRoom createNewChatRoom(List<User> users) {
-        for(ChatRoom chatRoom : chatRooms.values()) {
-            if(chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
+        for (ChatRoom chatRoom : chatRooms.values()) {
+            if (chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
                 return chatRoom;
             }
         }
@@ -72,28 +74,27 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         broadcast(message, room, false);
 
         //ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
-        System.out.println("sender "+message.getSender());
+        System.out.println("sender " + message.getSender());
 
 
-        /*executorService.submit(() -> {
-                    for (int i = 0; i < room.getUsers().size(); i++) {
+        executorService.submit(() -> {
+            for (int i = 0; i < room.getUsers().size(); i++) {
 
-                        if (!message.getSender().equals(room.getUsers().get(i))) {
-                            System.out.println("reciever "+room.getUsers().get(i));
-                            NotificationDAO notificationDAO = new NotificationDAOImpl();
-                            try {
-                               Notification notification = new Notification(message.getSender(),room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
-                                notificationDAO.createNotification(notification);
-                                 clientService.receiveNotification(notification);
-                                System.out.println("send Notification");
-                            } catch (SQLException | RemoteException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                if (!message.getSender().equals(room.getUsers().get(i))) {
+                    System.out.println("reciever " + room.getUsers().get(i));
+                    NotificationDAO notificationDAO = new NotificationDAOImpl();
+                    try {
+                        Notification notification = new Notification(message.getSender(), room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
+                        notificationDAO.createNotification(notification);
+                        clientService.receiveNotification(notification);
+                        System.out.println("send Notification");
+                    } catch (SQLException | RemoteException e) {
+                        e.printStackTrace();
                     }
-                });
+                }
+            }
+        });
 
-         */
 
         /*for(int i=0;i<room.getUsers().size();i++){
 
@@ -112,7 +113,6 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         }
 
          */
-
 
 
     }
@@ -149,23 +149,23 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         List<User> busyUsers = room.getUsers().stream().
                 filter(user -> user.isChatBotEnabled() && user.getStatus() == UserStatus.BUSY).
                 collect(Collectors.toList());
-        if(!busyUsers.isEmpty()) {
-            initChatBot();
-            try {
-                String automatedMessage = chatterBotSession.think(lastMessage.getContent());
-                busyUsers.forEach(user -> {
+        if (!busyUsers.isEmpty()) {
+            executorService.submit(() -> {
+                initChatBot();
+                for (User user : busyUsers) {
                     Message message = new Message();
+                    message.setStyle(new MessageStyle());
                     message.setSender(user);
-                    message.setContent(automatedMessage);
                     try {
+                        message.setContent(chatterBotSession.think(lastMessage.getContent()));
+                        room.getMessages().add(message);
+                        message.setChatRoom(room);
                         broadcast(message, room, true);
-                    } catch (RemoteException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                }
+            });
         }
 
     }
@@ -191,24 +191,32 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 //                e.printStackTrace();
 //            }
 //        });
-
-        room.getUsers().parallelStream()
-                .map(user -> sessionServiceProvider.getClient(user))
-                .filter(Objects::nonNull)
-                .forEach(client -> {
-            try {
-                client.receiveMessage(message);
-                System.out.println("sender"+message.getSender());
-                System.out.println("reciever"+client.getUser());
-                if(!client.getUser().equals(message.getSender()))
-                 client.receiveNotification(new Notification(message.getSender(),client.getUser(),NotificationType.MESSAGE_RECEIVED));
-
-
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        for (User user : room.getUsers()) {
+            ClientService clientService = sessionServiceProvider.getClient(user);
+            if (clientService != null) {
+                clientService.receiveMessage(message);
+                if (!clientService.getUser().equals(message.getSender()))
+                    clientService.receiveNotification(new Notification(message.getSender(), clientService.getUser(), NotificationType.MESSAGE_RECEIVED));
             }
-        });
-        if(!automated) {
+        }
+
+//        room.getUsers().parallelStream()
+//                .map(user -> sessionServiceProvider.getClient(user))
+//                .filter(Objects::nonNull)
+//                .forEach(client -> {
+//            try {
+//                client.receiveMessage(message);
+//                System.out.println("sender"+message.getSender());
+//                System.out.println("reciever"+client.getUser());
+//                if(!client.getUser().equals(message.getSender()))
+//                 client.receiveNotification(new Notification(message.getSender(),client.getUser(),NotificationType.MESSAGE_RECEIVED));
+//
+//
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//        });
+        if (!automated) {
             sendAutomatedMessages(room, message);
         }
 

@@ -1,5 +1,10 @@
 package com.iti.chat.model;
 
+import com.iti.chat.util.ColorUtils;
+import javafx.scene.paint.Color;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+
 import java.io.Serializable;
 
 public class MessageStyle implements Serializable {
@@ -8,6 +13,14 @@ public class MessageStyle implements Serializable {
     String color;
     String fontWeight;
     String fontPosture;
+
+    {
+        size = 15;
+        color = ColorUtils.toRGB(Color.BLACK);
+        fontFamily = "Arial";
+        fontWeight = FontWeight.LIGHT.name();
+        fontPosture = FontPosture.REGULAR.name();
+    }
 
     public String getFontWeight() {
         return fontWeight;
