@@ -25,6 +25,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         //starting the server
+        //System.setProperty("java.rmi.server.hostname", "10.145.7.155");
 
         try {
 
