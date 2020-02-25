@@ -193,7 +193,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 //        });
 
         room.getUsers().parallelStream()
-                .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
+                .map(user -> sessionServiceProvider.getClient(user))
+                .filter(Objects::nonNull)
+                .forEach(client -> {
             try {
                 client.receiveMessage(message);
                 System.out.println("sender"+message.getSender());
