@@ -130,10 +130,11 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public void logout(User user) {
-        managedSessions.remove(user);
+
         user.setStatus(UserStatus.OFFLINE);
         userInfoDidChange(user);
-       // notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
+        managedSessions.remove(onlineUsers.remove(user.getId()));
+        notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
     }
 
     public void register(User user, String password) throws SQLException, RemoteException {
