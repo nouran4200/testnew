@@ -205,6 +205,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     public void broadcast(Message message, ChatRoom room, boolean automated) throws RemoteException {
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         for (User user : room.getUsers()) {
+            if(user.getStatus() == UserStatus.OFFLINE) {
+                continue;
+            }
             ClientService clientService = sessionServiceProvider.getClient(user);
             if (clientService != null) {
                 clientService.receiveMessage(message);
