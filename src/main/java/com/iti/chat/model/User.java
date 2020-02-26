@@ -214,6 +214,7 @@ public class User implements Comparable<User>, Serializable {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", status='" + getStatus() + '\'' +
+                ", image='" + getRemoteImagePath() +
                 '}';
     }
 

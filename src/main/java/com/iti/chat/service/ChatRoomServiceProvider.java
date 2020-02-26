@@ -5,15 +5,15 @@ import com.google.code.chatterbotapi.ChatterBotFactory;
 import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
-import com.iti.chat.dao.NotificationDAO;
-import com.iti.chat.dao.NotificationDAOImpl;
 import com.iti.chat.model.*;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Predicate;
@@ -77,23 +77,23 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         System.out.println("sender " + message.getSender());
 
 
-        executorService.submit(() -> {
-            for (int i = 0; i < room.getUsers().size(); i++) {
-
-                if (!message.getSender().equals(room.getUsers().get(i))) {
-                    System.out.println("reciever " + room.getUsers().get(i));
-                    NotificationDAO notificationDAO = new NotificationDAOImpl();
-                    try {
-                        Notification notification = new Notification(message.getSender(), room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
-                        notificationDAO.createNotification(notification);
-                        clientService.receiveNotification(notification);
-                        System.out.println("send Notification");
-                    } catch (SQLException | RemoteException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+//        executorService.submit(() -> {
+//            for (int i = 0; i < room.getUsers().size(); i++) {
+//
+//                if (!message.getSender().equals(room.getUsers().get(i))) {
+//                    System.out.println("reciever " + room.getUsers().get(i));
+//                    NotificationDAO notificationDAO = new NotificationDAOImpl();
+//                    try {
+//                        Notification notification = new Notification(message.getSender(), room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
+//                        notificationDAO.createNotification(notification);
+//                        clientService.receiveNotification(notification);
+//                        System.out.println("send Notification");
+//                    } catch (SQLException | RemoteException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
 
 
         /*for(int i=0;i<room.getUsers().size();i++){
@@ -153,6 +153,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
             executorService.submit(() -> {
                 initChatBot();
                 for (User user : busyUsers) {
+                    if (user.equals(lastMessage.getSender())) {
+                        continue;
+                    }
                     Message message = new Message();
                     message.setStyle(new MessageStyle());
                     message.setSender(user);
@@ -183,14 +186,6 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     public void broadcast(Message message, ChatRoom room, boolean automated) throws RemoteException {
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
-//        room.getUsers().parallelStream().filter(user -> !(user.getStatus() == UserStatus.OFFLINE))
-//            .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
-//            try {
-//                client.receiveMessage(message);
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//        });
         for (User user : room.getUsers()) {
             ClientService clientService = sessionServiceProvider.getClient(user);
             if (clientService != null) {
@@ -199,23 +194,6 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                     clientService.receiveNotification(new Notification(message.getSender(), clientService.getUser(), NotificationType.MESSAGE_RECEIVED));
             }
         }
-
-//        room.getUsers().parallelStream()
-//                .map(user -> sessionServiceProvider.getClient(user))
-//                .filter(Objects::nonNull)
-//                .forEach(client -> {
-//            try {
-//                client.receiveMessage(message);
-//                System.out.println("sender"+message.getSender());
-//                System.out.println("reciever"+client.getUser());
-//                if(!client.getUser().equals(message.getSender()))
-//                 client.receiveNotification(new Notification(message.getSender(),client.getUser(),NotificationType.MESSAGE_RECEIVED));
-//
-//
-//            } catch (RemoteException e) {
-//                e.printStackTrace();
-//            }
-//        });
         if (!automated) {
             sendAutomatedMessages(room, message);
         }

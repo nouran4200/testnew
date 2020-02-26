@@ -39,8 +39,14 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public ClientService getClient(User user) {
+        return managedSessions.get(onlineUsers.get(user.getId()));
+    }
 
-        return managedSessions.get(user);
+    private void setUser(User user) throws RemoteException, NotBoundException {
+        ClientService clientService = managedSessions.remove(onlineUsers.get(user.getId()));
+        clientService.setUser(user);
+        managedSessions.put(user, clientService);
+        onlineUsers.put(user.getId(), user);
     }
 
 
@@ -55,13 +61,12 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         System.out.println("update Info"+user);
         try {
             userDAO.updateInfo(user);
+            setUser(user);
+            userInfoDidChange(user);
             Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
             notifyUsersFriends(notification);
-             userInfoDidChange(user);
-             changeStatus=true;
-            ClientService clientService = managedSessions.remove(user);
-            managedSessions.put(user, clientService);
-        } catch (SQLException e) {
+            changeStatus=true;
+        } catch (SQLException | NotBoundException e) {
             e.printStackTrace();
         }
     }
@@ -136,32 +141,39 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         userDAO.register(user, password);
     }
 
-    public void uploadImage (RemoteInputStream remoteInputStream,ClientService clientService ,User user) throws IOException, SQLException {
+    public void uploadImage (RemoteInputStream remoteInputStream,ClientService clientService ,User user) throws IOException, SQLException, NotBoundException {
         String token = UUID.randomUUID().toString();
         FileTransferServiceProvider fileTransferServiceProvider = FileTransferServiceProvider.getInstance();
         String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token ;
         fileTransferServiceProvider.uploadImage(remotePath, remoteInputStream, clientService);
         UserDAOImpl userDAO = UserDAOImpl.getInstance();
         userDAO.updateImage(remotePath,user);
+        user.setRemoteImagePath(remotePath);
+        setUser(user);
+        clientService.setUser(user);
+        userInfoDidChange(user);
     }
 
     @Override
     public void userInfoDidChange(User user) {
-        user.getFriends().stream().filter(u -> u.getStatus() == UserStatus.ONLINE).
+        broadCastChange(user);
+    }
+
+
+    private void broadCastChange(User user) {
+        System.out.printf("broadcasting user data change " + user);
+        try {
+            getClient(user).userInfoDidChange(user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        user.getFriends().stream().filter(u -> onlineUsers.containsKey(u.getId())).
                 map(u -> getClient(u)).forEach(client -> {
             try {
                 client.userInfoDidChange(user);
-
-
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-           /* System.out.println("userInfoChange sender"+user);
-
-
-            */
-
-
         });
     }
 
