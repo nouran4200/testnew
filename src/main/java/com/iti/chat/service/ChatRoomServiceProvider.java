@@ -54,6 +54,22 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         return chatRoom;
     }
 
+    public void userInfoChanged(User user) {
+        for(ChatRoom room : chatRooms.values()) {
+            for(int i = 0; i < room.getUsers().size(); i++) {
+                User userWithOldData = room.getUsers().get(i);
+                if(user.equals(userWithOldData)) {
+                    room.getUsers().set(i, user);
+                }
+            }
+            for(Message message : room.getMessages()) {
+                if(message.getSender().equals(user)) {
+                    message.setSender(user);
+                }
+            }
+        }
+    }
+
     @Override
     public List<ChatRoom> getGroupChatRooms(User user) {
         Predicate<ChatRoom> isGroupChat = (ChatRoom room) -> room.getUsers().size() > 2;
@@ -71,6 +87,8 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         room.getMessages().add(message);
         message.setChatRoom(room);
+        User sender = SessionServiceProvider.getInstance().getUser(message.getSender().getId());
+        message.setSender(sender);
         broadcast(message, room, false);
 
         //ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());

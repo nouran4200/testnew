@@ -42,6 +42,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         return managedSessions.get(onlineUsers.get(user.getId()));
     }
 
+    public User getUser(int userId) {
+        return onlineUsers.get(userId);
+    }
+
     private void setUser(User user) throws RemoteException, NotBoundException {
         ClientService clientService = managedSessions.remove(onlineUsers.get(user.getId()));
         clientService.setUser(user);
@@ -156,6 +160,11 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public void userInfoDidChange(User user) {
+        try {
+            ChatRoomServiceProvider.getInstance().userInfoChanged(user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         broadCastChange(user);
     }
 
