@@ -27,7 +27,7 @@ public class User implements Comparable<User>, Serializable {
         status = UserStatus.OFFLINE;
     }
 
-    public User (String firstName, String lastName, String phone, String email, int gender, String country){
+    public User(String firstName, String lastName, String phone, String email, int gender, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -36,6 +36,16 @@ public class User implements Comparable<User>, Serializable {
         this.gender = gender;
         this.country = country;
     }
+
+    public User(String firstName, String lastName, int id, String email, String phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.id = id;
+        this.email = email;
+    }
+
+
 
     public User() {
 
@@ -152,17 +162,19 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
-    public String getBio(){
+    public String getBio() {
         return bio;
     }
 
-    public void setBio(String bio){
+    public void setBio(String bio) {
         this.bio = bio;
     }
 
-    public String getPassword(){return password;}
+    public String getPassword() {
+        return password;
+    }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -184,7 +196,7 @@ public class User implements Comparable<User>, Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof User) {
+        if (object instanceof User) {
             User user = (User) object;
             return id == user.getId();
         }
@@ -192,8 +204,8 @@ public class User implements Comparable<User>, Serializable {
     }
 
     public ChatRoom getSharedChatRoom(List<User> users) {
-        for(ChatRoom chatRoom : chatRooms) {
-            if(chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
+        for (ChatRoom chatRoom : chatRooms) {
+            if (chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
                 return chatRoom;
             }
         }
