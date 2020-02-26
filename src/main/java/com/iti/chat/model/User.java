@@ -38,6 +38,12 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
+    public User (String firstName, String lastName,int id,String email, String phone){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+    }
     public User() {
 
     }
