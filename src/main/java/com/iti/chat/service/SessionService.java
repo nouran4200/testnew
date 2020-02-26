@@ -16,7 +16,7 @@ public interface SessionService extends Remote {
     ClientService getClient(User user) throws RemoteException;
     void updateInfo(User user) throws RemoteException;
     void updateUserPassword(User user) throws RemoteException;
-    void uploadImage (RemoteInputStream remoteInputStream, ClientService clientService , User user) throws IOException, SQLException;
+    void uploadImage (RemoteInputStream remoteInputStream, ClientService clientService , User user) throws IOException, SQLException, NotBoundException;
     void userInfoDidChange(User user) throws RemoteException;
 
 }

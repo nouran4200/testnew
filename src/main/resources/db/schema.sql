@@ -7,7 +7,7 @@ CREATE TABLE users(
 	email varchar(30) not null DEFAULT 'user@mail.com',
     gender int not null,
     country varchar(20) not null default 'Egypt',
-    password varchar(30) not null,
+    password varchar(120) not null,
 	phone varchar(15) unique not null,
 	image_uri varchar(100),
 	bio varchar(250) DEFAULT 'Bio.....'

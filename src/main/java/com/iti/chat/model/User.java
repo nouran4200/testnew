@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User implements Comparable<User>, Serializable {
+
     private String firstName;
     private String lastName;
     private int id;
@@ -37,6 +38,12 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
+    public User (String firstName, String lastName,int id,String email, String phone){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+    }
     public User() {
 
     }
@@ -214,6 +221,7 @@ public class User implements Comparable<User>, Serializable {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", status='" + getStatus() + '\'' +
+                ", image='" + getRemoteImagePath() +
                 '}';
     }
 
