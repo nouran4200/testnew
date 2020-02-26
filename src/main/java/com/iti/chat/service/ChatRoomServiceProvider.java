@@ -71,14 +71,18 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         message.setChatRoom(room);
         broadcast(message, room, false);
 
-        ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
-        executorService.submit(() -> {
+        //ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
+        System.out.println("sender "+message.getSender());
+
+
+        /*executorService.submit(() -> {
                     for (int i = 0; i < room.getUsers().size(); i++) {
 
                         if (!message.getSender().equals(room.getUsers().get(i))) {
+                            System.out.println("reciever "+room.getUsers().get(i));
                             NotificationDAO notificationDAO = new NotificationDAOImpl();
                             try {
-                               Notification notification = new Notification(message.getSender(), room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
+                               Notification notification = new Notification(message.getSender(),room.getUsers().get(i), NotificationType.MESSAGE_RECEIVED);
                                 notificationDAO.createNotification(notification);
                                  clientService.receiveNotification(notification);
                                 System.out.println("send Notification");
@@ -88,6 +92,8 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                         }
                     }
                 });
+
+         */
 
         /*for(int i=0;i<room.getUsers().size();i++){
 
@@ -187,9 +193,17 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 //        });
 
         room.getUsers().parallelStream()
-                .map(user -> sessionServiceProvider.getClient(user)).forEach(client -> {
+                .map(user -> sessionServiceProvider.getClient(user))
+                .filter(Objects::nonNull)
+                .forEach(client -> {
             try {
                 client.receiveMessage(message);
+                System.out.println("sender"+message.getSender());
+                System.out.println("reciever"+client.getUser());
+                if(!client.getUser().equals(message.getSender()))
+                 client.receiveNotification(new Notification(message.getSender(),client.getUser(),NotificationType.MESSAGE_RECEIVED));
+
+
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
