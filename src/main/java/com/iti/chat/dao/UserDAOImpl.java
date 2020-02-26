@@ -14,7 +14,7 @@ public class UserDAOImpl implements UserDAO {
 
     private static UserDAOImpl instance;
 
-    private UserDAOImpl() {
+    protected UserDAOImpl() {
 
     }
 

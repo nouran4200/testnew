@@ -13,7 +13,7 @@ public class UserAdapter {
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
             String email = resultSet.getString("email");
-            String phone = resultSet.getString("phone");
+                String phone = resultSet.getString("phone");
             int id = resultSet.getInt("user_id");
             int gender = resultSet.getInt("gender");
             String country = resultSet.getString("country");

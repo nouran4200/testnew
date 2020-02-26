@@ -21,6 +21,10 @@ public class Main extends Application {
     private FriendRequestsService friendRequestsService;
     private FileTransferService fileTransferService;
 
+    public static void main(String[] args) {
+        launch();
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -51,9 +55,9 @@ public class Main extends Application {
                 registry.unbind("sessionService");
                 registry.unbind("fileTransferService");
 
-                UnicastRemoteObject.unexportObject(chatRoomService , false);
-                UnicastRemoteObject.unexportObject(sessionService , false);
-                UnicastRemoteObject.unexportObject(friendRequestsService , false);
+                UnicastRemoteObject.unexportObject(chatRoomService, false);
+                UnicastRemoteObject.unexportObject(sessionService, false);
+                UnicastRemoteObject.unexportObject(friendRequestsService, false);
                 UnicastRemoteObject.unexportObject(fileTransferService, false);
 
             } catch (RemoteException e) {
@@ -67,10 +71,6 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/home.fxml"));
         stage.setScene(new Scene(root, 900, 700));
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 
 }
