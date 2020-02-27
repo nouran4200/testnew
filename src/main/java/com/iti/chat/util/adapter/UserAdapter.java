@@ -18,6 +18,7 @@ public class UserAdapter {
             int gender = resultSet.getInt("gender");
             String country = resultSet.getString("country");
             String url = resultSet.getString("image_uri");
+            String bio = resultSet.getString("bio");
             User user = new User();
             user.setCountry(country);
             user.setEmail(email);
@@ -27,6 +28,7 @@ public class UserAdapter {
             user.setId(id);
             user.setGender(gender);
             user.setRemoteImagePath(url);
+            user.setBio(bio);
             return user;
         }
         return null;
