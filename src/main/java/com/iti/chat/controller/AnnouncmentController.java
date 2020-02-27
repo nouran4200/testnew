@@ -10,6 +10,7 @@ import com.iti.chat.model.MessageStyle;
 import com.iti.chat.model.Notification;
 import com.iti.chat.service.SessionServiceProvider;
 import com.iti.chat.util.ColorUtils;
+import com.iti.chat.util.Encryption;
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -130,6 +131,7 @@ public class AnnouncmentController implements Initializable{
             try {
                 SessionServiceProvider ssp = SessionServiceProvider.getInstance();
                 Message msg = getMessage();
+                msg.setContent(Encryption.encrypt(msg.getContent()));
                 ssp.getClientService().values().forEach(client -> {
                     try {
                         client.recieveAnnouncment(msg);
