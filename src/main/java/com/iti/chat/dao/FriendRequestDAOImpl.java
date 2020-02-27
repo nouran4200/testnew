@@ -89,7 +89,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
     }
 
     @Override
-    public List<User> pendingFriendRequests(User user) {
+    public List<User> pendingFriendRequests(User user) {//returns users that sent me requests but i didn't reject or accept
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "select u.* from friend_requests fr, users u where fr.sender_id = u.user_id " +
@@ -104,6 +104,25 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
         }
         return null;
     }
+
+    @Override
+    public List<User> pendingFriendRequestsSent(User user) {//returns users that i sent to them requests but they didn't reject or accept
+        try {
+            Connection connection = DBConnection.getInstance().getConnection();
+            String query = "select u.* from friend_requests fr, users u where fr.sender_id =" + user.getId() +
+                    " and fr.receiver_id = u.user_id and status is null";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            List<User> friendRequests = UserAdapter.createUsers(resultSet);
+            DBConnection.getInstance().closeConnection(connection);
+            return friendRequests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     @Override
     public List<User> getFriends(User user) {
