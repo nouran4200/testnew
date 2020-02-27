@@ -67,8 +67,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             userDAO.updateInfo(user);
             setUser(user);
             userInfoDidChange(user);
-            Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
+           /* Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
             notifyUsersFriends(notification);
+      */
+
             changeStatus=true;
         } catch (SQLException | NotBoundException e) {
             e.printStackTrace();
@@ -87,6 +89,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public User login(String phone, String password, ClientService client) throws SQLException, RemoteException, NotBoundException {
+
         UserDAO userDAO = UserDAOImpl.getInstance();
         User user = userDAO.login(phone, password);
         if (user != null) {
@@ -167,6 +170,24 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             e.printStackTrace();
         }
         broadCastChange(user);
+    }
+
+    @Override
+    public void updateStatus(User user) throws RemoteException{
+        UserDAO userDAO = UserDAOImpl.getInstance();
+        System.out.println("update Info"+user);
+        try {
+            userDAO.updateInfo(user);
+            setUser(user);
+            userInfoDidChange(user);
+            Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
+            notifyUsersFriends(notification);
+
+
+            changeStatus=true;
+        } catch (SQLException | NotBoundException e ) {
+            e.printStackTrace();
+        }
     }
 
 
