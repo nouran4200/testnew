@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class Server {
 
     public static void main(String[] args) throws SQLException {
-        new Server();
+        //new Server();
 
      /* User shimaa= UserDAOImpl.getInstance().findUserByPhone("01005953821");
 =======
