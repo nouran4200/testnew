@@ -51,7 +51,7 @@ public class UserDAOImpl implements UserDAO {
             String updateQuery = "UPDATE chatty.users " +
                     "SET first_name = '" + user.getFirstName() + "', last_name = '" + user.getLastName()
                     + "' , phone = '" + user.getPhone() + "', email = '" + user.getPhone() +
-                    "', country = '" + user.getCountry() +
+                    "', country = '" + user.getCountry() + "', bio = '" + user.getBio() +
                     "' where user_id = " + user.getId();
             //System.out.println(updateQuery);
             Statement statement = connection.createStatement();
@@ -111,7 +111,8 @@ public class UserDAOImpl implements UserDAO {
         }
 
     }
-    public User findUserById(int id)  throws SQLException{
+
+    public User findUserById(int id) throws SQLException {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "select * from users where user_id = " + id;
@@ -199,7 +200,7 @@ public class UserDAOImpl implements UserDAO {
         searchQuery = StringUtil.addSingleQuotes(searchQuery);
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String phoneQuery = "select * from users where phone like " + searchQuery ;
+            String phoneQuery = "select * from users where phone like " + searchQuery;
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(phoneQuery);
             List<User> users = UserAdapter.createUsers(resultSet);
