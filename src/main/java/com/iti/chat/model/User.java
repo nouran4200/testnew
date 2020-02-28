@@ -1,6 +1,7 @@
 package com.iti.chat.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +21,14 @@ public class User implements Comparable<User>, Serializable {
     private List<ChatRoom> chatRooms;
     private boolean chatBotEnabled;
     private String remoteImagePath;
+    private int isAddedFromServer;
+    private LocalDate birthDate;
 
     {
         friends = new ArrayList<>();
         chatRooms = new ArrayList<>();
         country = "Egypt";
+        bio = "Biooo.......";
         status = UserStatus.OFFLINE;
     }
 
@@ -228,5 +232,21 @@ public class User implements Comparable<User>, Serializable {
     @Override
     public int compareTo(User o) {
         return firstName.compareTo(o.firstName);
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public int getIsAddedFromServer() {
+        return isAddedFromServer;
+    }
+
+    public void setIsAddedFromServer(int isAddedFromServer) {
+        this.isAddedFromServer = isAddedFromServer;
     }
 }

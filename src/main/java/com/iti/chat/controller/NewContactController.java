@@ -115,7 +115,7 @@ public class NewContactController implements Initializable {
             passwordError.setText("");
             confirmPasswordError.setText("");
 
-            String defaultEmail = "newUser@email.com";
+            String defaultEmail = "";
             String defaultCountry = "Egypt";
             User user = new User(firstNameTextField.getText(),
                     lastNameTextField.getText(),
@@ -123,6 +123,7 @@ public class NewContactController implements Initializable {
                     defaultEmail,
                     gender,
                     defaultCountry);
+            user.setIsAddedFromServer(1);
             RegiseterDelegate regiseterDelegate = new RegiseterDelegate();
             try {
                 User submittedUser = regiseterDelegate.register(user, passwordTextField.getText());
