@@ -59,4 +59,9 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
     public List<User> pendingFriendRequests(ClientService client) throws RemoteException {
         return friendRequestDAO.pendingFriendRequests(client.getUser());
     }
+
+    @Override
+    public List<User> pendingFriendRequestsSent(ClientService client) throws RemoteException {
+        return friendRequestDAO.pendingFriendRequestsSent(client.getUser());
+    }
 }

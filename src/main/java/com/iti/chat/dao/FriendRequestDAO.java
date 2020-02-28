@@ -10,5 +10,6 @@ public interface FriendRequestDAO {
     public void rejectFriendRequest(User receiver, User sender);
     public List<User> pendingFriendRequests(User user);
     public List<User> getFriends(User user);
+    public List<User> pendingFriendRequestsSent(User user);
 }
 
