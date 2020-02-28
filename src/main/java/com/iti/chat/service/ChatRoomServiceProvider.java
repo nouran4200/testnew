@@ -6,6 +6,7 @@ import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.iti.chat.model.*;
+import com.iti.chat.util.Encryption;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -83,13 +84,15 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
 
     @Override
     public void sendMessage(Message message, int roomId) throws RemoteException {
+
         ChatRoom room = chatRooms.get(roomId);
-        SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
+//        SessionServiceProvider sessionServiceProvider = SessionServiceProvider.getInstance();
         room.getMessages().add(message);
         message.setChatRoom(room);
         User sender = SessionServiceProvider.getInstance().getUser(message.getSender().getId());
         message.setSender(sender);
         broadcast(message, room, false);
+        message.setContent(Encryption.decrypt(message.getContent()));
 
         //ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
         System.out.println("sender " + message.getSender());
