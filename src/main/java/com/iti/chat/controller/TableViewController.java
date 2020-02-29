@@ -1,8 +1,12 @@
 package com.iti.chat.controller;
 
 import com.iti.chat.dao.UserDAOImpl;
+import com.iti.chat.model.Gender;
+import com.iti.chat.util.JFXCountryComboBox;
 import com.iti.chat.model.User;
+import com.iti.chat.util.RegisterValidation;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,14 +14,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -38,6 +45,8 @@ private TableColumn<User,String> countryCol ;
 @FXML
 private TableColumn<User,String> phoneCol;
 @FXML
+TableColumn<User,String> bdateCol;
+@FXML
  JFXButton updateButton ;
 @FXML
 JFXTextField firstName ;
@@ -51,7 +60,18 @@ JFXTextField phone ;
 JFXButton saveButton;
 @FXML
 JFXButton deleteButton;
-
+@FXML
+ComboBox countryCombo ;
+@FXML
+Text firstError;
+@FXML
+Text lastError;
+@FXML
+Text phoneError;
+@FXML
+Text emailError;
+    @FXML
+    Text errorSubmit;
 
 
     UserDAOImpl dao = UserDAOImpl.getInstance();
@@ -63,6 +83,9 @@ JFXButton deleteButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        addCountries();
+
+
         ObservableList<User> oblist  = FXCollections.observableArrayList(users);
 
         firstNameCol.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
@@ -70,34 +93,76 @@ JFXButton deleteButton;
         emailCol.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
         countryCol.setCellValueFactory(new PropertyValueFactory<User, String>("country"));
         phoneCol.setCellValueFactory(new PropertyValueFactory<User, String>("phone"));
+        bdateCol.setCellValueFactory(new PropertyValueFactory<User, String>("birthDate"));
+
         tableView.setItems(oblist);
 
-//        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                System.out.println(newSelection);
-//            }
-//        });
+
 
            updateButton.setOnAction(ae -> {
+
+            if (tableView.getSelectionModel().selectedItemProperty().getValue() == null)
+            {
+                errorSubmit.setText("No Data to Update");
+                return;
+            }
             String firstname =  tableView.getSelectionModel().selectedItemProperty().getValue().getFirstName();
             String lastname =  tableView.getSelectionModel().selectedItemProperty().getValue().getLastName();
             String emailuser =  tableView.getSelectionModel().selectedItemProperty().getValue().getEmail();
-            String phoneuser =  tableView.getSelectionModel().selectedItemProperty().getValue().getPhone();
+            String coutry = tableView.getSelectionModel().selectedItemProperty().getValue().getCountry();
 
             firstName.setText(firstname);
             lastName.setText(lastname);
             email.setText(emailuser);
-            phone.setText(phoneuser);
+            countryCombo.setValue(coutry);
 
 
         });
         saveButton.setOnAction(ae -> {
-            User userupdated =  tableView.getSelectionModel().selectedItemProperty().getValue();
-            userupdated.setFirstName(firstName.getText());
-            userupdated.setLastName(lastName.getText());
-            userupdated.setEmail(email.getText());
-            userupdated.setPhone(phone.getText());
-            dao.updateInfo(userupdated);
+            RegisterValidation validator = new RegisterValidation();
+            boolean firstNameValidation = validator.checkName(firstName.getText());
+            boolean lastNameValidation = validator.checkName(lastName.getText());
+            int emailValdiation = validator.checkEmail(email.getText());
+
+            boolean submit = true;
+
+
+            if (!firstNameValidation  ) {
+                firstError.setText("invalid Name");
+                submit = false;
+            }
+
+            if (!lastNameValidation) {
+                lastError.setText("invalid Name");
+                submit = false;
+            }
+
+            if (emailValdiation == validator.INVALID) {
+                emailError.setText("invalid email");
+                submit = false;
+            }
+
+
+
+
+            if (submit == true) {
+                User userupdated =  tableView.getSelectionModel().selectedItemProperty().getValue();
+                userupdated.setFirstName(firstName.getText());
+                userupdated.setLastName(lastName.getText());
+                userupdated.setEmail(email.getText());
+                userupdated.setCountry(countryCombo.getValue().toString());
+
+                firstError.setText("");
+                lastError.setText("");
+                emailError.setText("");
+                errorSubmit.setText("");
+                dao.updateInfo(userupdated);
+
+            }
+            else {
+                errorSubmit.setText("failed update");
+
+            }
             tableView.refresh();
 
 
@@ -121,5 +186,9 @@ JFXButton deleteButton;
         });
 
 
+    }
+    private void addCountries() {
+        JFXCountryComboBox country = new JFXCountryComboBox();
+        country.addCountries(countryCombo);
     }
 }

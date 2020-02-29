@@ -145,9 +145,10 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
         ClientService clientService = SessionServiceProvider.getInstance().getClient(message.getSender());
         executorService.submit(() -> {
             try {
-                String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token + message.getContent();
+                String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token + Encryption.decrypt(message.getContent());
                 fileTransferServiceProvider.uploadFile(remotePath, remoteInputStream, clientService);
                 message.setRemotePath(remotePath);
+                message.setStyle(new MessageStyle());
                 sendMessage(message, roomId);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -184,7 +185,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                         message.setContent(chatterBotSession.think(lastMessage.getContent()));
                         room.getMessages().add(message);
                         message.setChatRoom(room);
+                        message.setContent(Encryption.encrypt(message.getContent()));
                         broadcast(message, room, true);
+                        message.setContent(Encryption.decrypt(message.getContent()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -195,12 +198,14 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
     }
 
     private void initChatBot() {
-        ChatterBotFactory factory = new ChatterBotFactory();
-        try {
-            ChatterBot bot = factory.create(ChatterBotType.PANDORABOTS, "b0dafd24ee35a477");
-            chatterBotSession = bot.createSession();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(chatterBotSession == null) {
+            ChatterBotFactory factory = new ChatterBotFactory();
+            try {
+                ChatterBot bot = factory.create(ChatterBotType.PANDORABOTS, "b0dafd24ee35a477");
+                chatterBotSession = bot.createSession();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -218,7 +223,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                     clientService.receiveNotification(new Notification(message.getSender(), clientService.getUser(), NotificationType.MESSAGE_RECEIVED));
             }
         }
-        if (!automated) {
+        if (!automated && message.getMessageType() !=  MessageType.ATTACHMENT_MESSAGE) {
             sendAutomatedMessages(room, message);
         }
 

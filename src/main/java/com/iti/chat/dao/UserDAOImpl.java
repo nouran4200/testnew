@@ -7,6 +7,7 @@ import com.iti.chat.service.DBConnection;
 import com.iti.chat.util.StringUtil;
 import com.iti.chat.util.adapter.UserAdapter;
 
+import java.rmi.RemoteException;
 import java.sql.*;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
             List<User> users = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return users;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
             return null;
         }
@@ -126,7 +127,7 @@ public class UserDAOImpl implements UserDAO {
             User user = UserAdapter.createUser(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return user;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
             return null;
         }
@@ -142,7 +143,7 @@ public class UserDAOImpl implements UserDAO {
             User user = UserAdapter.createUser(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return user;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
             return null;
         }
@@ -150,7 +151,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
-    public User login(String phone, String password) throws SQLException {
+    public User login(String phone, String password) throws SQLException, RemoteException {
         phone = StringUtil.addSingleQuotes(phone);
         password = StringUtil.addSingleQuotes(password);
         String query = "select * from users where phone = " + phone +
@@ -171,8 +172,8 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User register(User user, String password) throws SQLException {
         if (findUserByPhone(user.getPhone()) == null) {
-            String query = "insert into users (first_name, last_name, email, password, phone, gender, country,birthDate ,isServer)" +
-                    " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "insert into users (first_name, last_name, email, password, phone, gender, country ,isServer)" +
+                    " values (?, ?, ?, ?, ?, ?, ?, ?)";
             try {
                 Connection connection = DBConnection.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -183,11 +184,7 @@ public class UserDAOImpl implements UserDAO {
                 preparedStatement.setString(5, user.getPhone());
                 preparedStatement.setInt(6, user.getGender());
                 preparedStatement.setString(7, user.getCountry());
-                if(user.getBirthDate() != null)
-                    preparedStatement.setString(8, user.getBirthDate().toString());
-                else
-                    preparedStatement.setString(8, null);
-                preparedStatement.setInt(9, user.getIsAddedFromServer());
+                preparedStatement.setInt(8, user.getIsAddedFromServer());
                 preparedStatement.executeUpdate();
                 ResultSet tableKeys = preparedStatement.getGeneratedKeys();
                 tableKeys.next();
@@ -214,7 +211,7 @@ public class UserDAOImpl implements UserDAO {
             List<User> users = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return users;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
             return null;
         }
@@ -234,7 +231,7 @@ public class UserDAOImpl implements UserDAO {
             List<User> users = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return users;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
             return null;
         }

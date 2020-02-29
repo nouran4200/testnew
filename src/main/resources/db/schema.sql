@@ -11,8 +11,8 @@ CREATE TABLE users(
 	phone varchar(15) unique not null,
 	image_uri varchar(100),
 	bio varchar(250) DEFAULT 'Bio.....',
-	birthDate varchar(60),
-    isServer int not null
+	birthDate varchar(60) DEFAULT "1993-10-10",
+    isServer int not null DEFAULT 0
 );
 
 CREATE TABLE friend_requests(

@@ -6,6 +6,7 @@ import com.iti.chat.model.User;
 import com.iti.chat.service.DBConnection;
 import com.iti.chat.util.adapter.UserAdapter;
 
+import java.rmi.RemoteException;
 import java.sql.*;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
             List<User> friendRequests = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return friendRequests;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
         }
         return null;
@@ -116,7 +117,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
             List<User> friendRequests = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return friendRequests;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
         }
         return null;
@@ -141,7 +142,7 @@ public class FriendRequestDAOImpl implements FriendRequestDAO {
             List<User> friends = UserAdapter.createUsers(resultSet);
             DBConnection.getInstance().closeConnection(connection);
             return friends;
-        } catch (SQLException e) {
+        } catch (SQLException | RemoteException e) {
             e.printStackTrace();
         }
         return null;

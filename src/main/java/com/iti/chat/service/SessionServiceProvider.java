@@ -46,11 +46,13 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         return onlineUsers.get(userId);
     }
 
-    private void setUser(User user) throws RemoteException, NotBoundException {
-        ClientService clientService = managedSessions.remove(onlineUsers.get(user.getId()));
-        clientService.setUser(user);
-        managedSessions.put(user, clientService);
-        onlineUsers.put(user.getId(), user);
+    protected void setUser(User user) throws RemoteException, NotBoundException {
+        if(onlineUsers.containsKey(user.getId())) {
+            ClientService clientService = managedSessions.remove(onlineUsers.get(user.getId()));
+            clientService.setUser(user);
+            managedSessions.put(user, clientService);
+            onlineUsers.put(user.getId(), user);
+        }
     }
 
 
@@ -94,6 +96,9 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         User user = userDAO.login(phone, password);
         if (user != null) {
             //login process
+            if(onlineUsers.containsKey(user.getId())) {
+                return null;
+            }
             onlineUsers.put(user.getId() , user);
             managedSessions.put(user, client);
             for(User friend : user.getFriends()) {
@@ -146,6 +151,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     public void register(User user, String password) throws SQLException, RemoteException {
         UserDAO userDAO = UserDAOImpl.getInstance();
+        user.setEmail(user.getFirstName() + "@gmail.com");
         userDAO.register(user, password);
     }
 
@@ -157,9 +163,11 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         UserDAOImpl userDAO = UserDAOImpl.getInstance();
         userDAO.updateImage(remotePath,user);
         user.setRemoteImagePath(remotePath);
-        setUser(user);
-        clientService.setUser(user);
-        userInfoDidChange(user);
+        if(onlineUsers.containsKey(user.getId())) {
+            setUser(user);
+            clientService.setUser(user);
+            userInfoDidChange(user);
+        }
     }
 
     @Override
