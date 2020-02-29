@@ -1,6 +1,7 @@
 package com.iti.chat.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +17,22 @@ public class User implements Comparable<User>, Serializable {
     private String country;
     private String bio;
     private String password;
-    private List<User> friends;
+    private List<com.iti.chat.model.User> friends;
     private List<ChatRoom> chatRooms;
     private boolean chatBotEnabled;
     private String remoteImagePath;
+    private int isAddedFromServer;
+    private LocalDate birthDate;
 
     {
         friends = new ArrayList<>();
         chatRooms = new ArrayList<>();
         country = "Egypt";
+        bio = "Biooo.......";
         status = UserStatus.OFFLINE;
     }
 
-    public User (String firstName, String lastName, String phone, String email, int gender, String country){
+    public User(String firstName, String lastName, String phone, String email, int gender, String country) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -38,12 +42,13 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
-    public User (String firstName, String lastName,int id,String email, String phone){
+    public User(String firstName, String lastName, int id, String email, String phone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
     }
+
     public User() {
 
     }
@@ -159,25 +164,27 @@ public class User implements Comparable<User>, Serializable {
         this.country = country;
     }
 
-    public String getBio(){
+    public String getBio() {
         return bio;
     }
 
-    public void setBio(String bio){
+    public void setBio(String bio) {
         this.bio = bio;
     }
 
-    public String getPassword(){return password;}
+    public String getPassword() {
+        return password;
+    }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public List<User> getFriends() {
+    public List<com.iti.chat.model.User> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<User> friends) {
+    public void setFriends(List<com.iti.chat.model.User> friends) {
         this.friends = friends;
     }
 
@@ -191,16 +198,16 @@ public class User implements Comparable<User>, Serializable {
 
     @Override
     public boolean equals(Object object) {
-        if(object instanceof User) {
-            User user = (User) object;
+        if (object instanceof com.iti.chat.model.User) {
+            com.iti.chat.model.User user = (com.iti.chat.model.User) object;
             return id == user.getId();
         }
         return false;
     }
 
-    public ChatRoom getSharedChatRoom(List<User> users) {
-        for(ChatRoom chatRoom : chatRooms) {
-            if(chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
+    public ChatRoom getSharedChatRoom(List<com.iti.chat.model.User> users) {
+        for (ChatRoom chatRoom : chatRooms) {
+            if (chatRoom.getUsers().containsAll(users) && users.containsAll(chatRoom.getUsers())) {
                 return chatRoom;
             }
         }
@@ -226,7 +233,24 @@ public class User implements Comparable<User>, Serializable {
     }
 
     @Override
-    public int compareTo(User o) {
+    public int compareTo(com.iti.chat.model.User o) {
         return firstName.compareTo(o.firstName);
     }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public int getIsAddedFromServer() {
+        return isAddedFromServer;
+    }
+
+    public void setIsAddedFromServer(int isAddedFromServer) {
+        this.isAddedFromServer = isAddedFromServer;
+    }
+
 }
