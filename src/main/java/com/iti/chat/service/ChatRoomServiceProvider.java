@@ -148,6 +148,7 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                 String remotePath = FileTransferServiceProvider.ROOT_FILES_PATH + "/" + token + Encryption.decrypt(message.getContent());
                 fileTransferServiceProvider.uploadFile(remotePath, remoteInputStream, clientService);
                 message.setRemotePath(remotePath);
+                message.setStyle(new MessageStyle());
                 sendMessage(message, roomId);
             } catch (IOException e) {
                 e.printStackTrace();
