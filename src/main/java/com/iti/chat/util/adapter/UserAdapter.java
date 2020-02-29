@@ -22,6 +22,7 @@ public class UserAdapter {
             String url = resultSet.getString("image_uri");
             String bio = resultSet.getString("bio");
             String birthDate = resultSet.getString("birthDate");
+            int isAddedFromServer = resultSet.getInt("isServer");
             User user = new User();
             user.setCountry(country);
             user.setEmail(email);
@@ -32,6 +33,7 @@ public class UserAdapter {
             user.setGender(gender);
             user.setRemoteImagePath(url);
             user.setBio(bio);
+            user.setIsAddedFromServer(isAddedFromServer);
             if(birthDate!=null)
                 user.setBirthDate(LocalDate.parse(birthDate));
             return user;

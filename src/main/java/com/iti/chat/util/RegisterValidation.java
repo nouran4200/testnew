@@ -32,7 +32,7 @@ public class RegisterValidation {
 
     public boolean checkPass(String pass) {
         boolean flag = true;
-        if (pass.trim().length() == 0 || !pass.matches("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,30})")) {
+        if (pass.trim().length() == 0) {
             return false;
         }
         return flag;

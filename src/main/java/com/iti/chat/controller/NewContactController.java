@@ -4,6 +4,7 @@ import com.iti.chat.delegate.RegiseterDelegate;
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.Gender;
 import com.iti.chat.model.User;
+import com.iti.chat.util.Hashing;
 import com.iti.chat.util.RegisterValidation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -126,7 +127,7 @@ public class NewContactController implements Initializable {
             user.setIsAddedFromServer(1);
             RegiseterDelegate regiseterDelegate = new RegiseterDelegate();
             try {
-                User submittedUser = regiseterDelegate.register(user, passwordTextField.getText());
+                User submittedUser = regiseterDelegate.register(user, Hashing.getSecurePassword(passwordTextField.getText()));
                 if (submittedUser != null) {
                     submitResult.setText("Done successfully");
                 }

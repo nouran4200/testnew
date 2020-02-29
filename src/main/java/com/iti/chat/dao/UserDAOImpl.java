@@ -82,6 +82,7 @@ public class UserDAOImpl implements UserDAO {
             Connection connection = DBConnection.getInstance().getConnection();
             String updateQuery = "UPDATE chatty.users " +
                     "SET password = '" + user.getPassword() +
+                    "', isServer = '" + user.getIsAddedFromServer() +
                     "' where user_id = " + user.getId();
             //System.out.println(updateQuery);
             Statement statement = connection.createStatement();
@@ -173,7 +174,10 @@ public class UserDAOImpl implements UserDAO {
                 preparedStatement.setString(5, user.getPhone());
                 preparedStatement.setInt(6, user.getGender());
                 preparedStatement.setString(7, user.getCountry());
-                preparedStatement.setString(8, user.getBirthDate().toString());
+                if(user.getBirthDate() != null)
+                    preparedStatement.setString(8, user.getBirthDate().toString());
+                else
+                    preparedStatement.setString(8, null);
                 preparedStatement.setInt(9, user.getIsAddedFromServer());
                 preparedStatement.executeUpdate();
                 ResultSet tableKeys = preparedStatement.getGeneratedKeys();
