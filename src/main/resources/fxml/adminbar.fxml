@@ -37,6 +37,13 @@
                 </ImageView>
             </graphic>
         </JFXButton>
+        <JFXButton text="CrudSystem" styleClass="menuButton" prefHeight="60" fx:id="crudButton">
+            <graphic>
+                <ImageView fitHeight="40" fitWidth="40">
+                    <Image url="@../images/icons8-statistics-64.png"/>
+                </ImageView>
+            </graphic>
+        </JFXButton>
     </children>
 
 

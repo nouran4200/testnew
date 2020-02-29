@@ -67,6 +67,17 @@ public class HomeController implements Initializable {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        adminbarController.crudButton.setOnAction(ae -> {
+            try {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(HomeController.class.getResource("/fxml/TableView.fxml"));
+                Parent parent = loader
+                        .load();
+                root.setCenter(parent);
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
 
 //        root.getChildren().add(makePieFemaleMale(males, females));
 //        root.getChildren().add(makeOnlineOffline(online, offline));

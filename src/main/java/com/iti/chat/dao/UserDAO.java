@@ -1,6 +1,8 @@
 package com.iti.chat.dao;
 
 import com.iti.chat.model.User;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,7 +12,9 @@ public interface UserDAO {
     public User register(User user, String password) throws SQLException;
     public List<User> searchByName(String searchQuery) throws SQLException;
     public void updateInfo(User user) throws SQLException;
+    public void deleteUser(User user) throws SQLException;
     public List<User> getAllUsers() throws SQLException;
+
     public void updateUserPassword(User user) throws SQLException;
     public void updateImage(String url , User user)throws SQLException;
     public List<User> searchByPhone(String searchQuery) throws SQLException;

@@ -32,7 +32,8 @@ public class AdminbarController implements Initializable {
     JFXButton announceButton;
     @FXML
     JFXButton addContactButton;
-
+    @FXML
+    JFXButton crudButton;
 
     
     @Override

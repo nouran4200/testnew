@@ -66,6 +66,15 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    public void deleteUser(User user) throws SQLException {
+        Connection connection = DBConnection.getInstance().getConnection();
+        String deleteQuery = "delete from users where user_id ="+ user.getId();
+        Statement statement = connection.createStatement();
+        statement.execute(deleteQuery);
+        DBConnection.getInstance().closeConnection(connection);
+    }
+
+    @Override
     public void updateUserPassword(User user) throws SQLException {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
@@ -193,6 +202,9 @@ public class UserDAOImpl implements UserDAO {
             return null;
         }
     }
+
+
+
 
     public List<User> searchByPhone(String searchQuery) throws SQLException {
         searchQuery = "%" + searchQuery + "%";
