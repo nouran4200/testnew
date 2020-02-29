@@ -68,7 +68,13 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
     @Override
     public void rejectFriendRequest(ClientService client, User sender) throws RemoteException {
         friendRequestDAO.rejectFriendRequest(client.getUser(), sender);
-        client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_REJECTED));
+        SessionServiceProvider ssp = SessionServiceProvider.getInstance();
+        ClientService senderClient = ssp.getClient(sender);
+        User receiver = client.getUser();
+        if(senderClient != null) {
+            senderClient.receiveNotification(new Notification(sender, receiver, NotificationType.FRIENDSHIP_ACCEPTED));
+        }
+        //client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_REJECTED));
 
     }
 

@@ -39,7 +39,11 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public ClientService getClient(User user) {
-        return managedSessions.get(onlineUsers.get(user.getId()));
+        if(onlineUsers.containsKey(user.getId())) {
+            return managedSessions.get(onlineUsers.get(user.getId()));
+        }
+        return null;
+
     }
 
     public User getUser(int userId) {
