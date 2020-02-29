@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.TableViewController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="200.0">
+         <children>
+            <JFXTextField fx:id="firstName" layoutX="15.0" layoutY="24.0" prefHeight="25.0" prefWidth="175.0" text="First name" />
+            <JFXTextField fx:id="lastName" layoutX="15.0" layoutY="78.0" prefHeight="25.0" prefWidth="175.0" text="Last name" />
+            <JFXTextField fx:id="email" layoutX="15.0" layoutY="132.0" prefHeight="25.0" prefWidth="175.0" text="Email" />
+            <JFXTextField fx:id="phone" layoutX="13.0" layoutY="185.0" prefHeight="25.0" prefWidth="175.0" text="Phone" />
+            <JFXComboBox fx:id="country" layoutX="13.0" layoutY="241.0" prefHeight="25.0" prefWidth="175.0" promptText="Country" />
+            <JFXButton fx:id="saveButton" layoutX="15.0" layoutY="331.0" style="-fx-background-color: #3385ff;" text="Save" textFill="WHITE" />
+            <JFXButton fx:id="updateButton" layoutX="66.0" layoutY="331.0" style="-fx-background-color: #3385ff;" text="Update" textFill="WHITE" />
+            <JFXButton fx:id="deleteButton" layoutX="130.0" layoutY="331.0" style="-fx-background-color: #3385ff;" text="Delete" textFill="WHITE" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="190.0" prefHeight="400.0" prefWidth="411.0">
+         <children>
+            <TableView fx:id="tableView" layoutX="19.0" layoutY="9.0" prefHeight="388.0" prefWidth="376.0">
+              <columns>
+                <TableColumn fx:id="firstNameCol" prefWidth="75.0" text="First Name" />
+                <TableColumn fx:id="lastNameCol" prefWidth="75.0" text="Last Name" />
+                  <TableColumn fx:id="emailCol" prefWidth="75.0" text="Email" />
+                  <TableColumn fx:id="countryCol" prefWidth="75.0" text="Country" />
+                  <TableColumn fx:id="phoneCol" prefWidth="75.0" text="Phone" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
