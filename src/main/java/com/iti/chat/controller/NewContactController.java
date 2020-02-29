@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -85,12 +86,12 @@ public class NewContactController implements Initializable {
 
         boolean submit = true;
         if (!firstNameValidation) {
-            firstNameError.setText("invalid Name");
+            firstNameError.setText("invalid Name(less than 20 character)");
             submit = false;
         }
 
         if (!lastNameValidation) {
-            lastNameError.setText("invalid Name");
+            lastNameError.setText("invalid Name(less than 20 character)");
             submit = false;
         }
         if (!phoneValidation) {
@@ -102,7 +103,7 @@ public class NewContactController implements Initializable {
             submit = false;
         }
         if (!passwordMatchValidation) {
-            confirmPasswordError.setText("invalid password");
+            confirmPasswordError.setText("don't match");
             submit = false;
         }
         if (submit) {
@@ -132,6 +133,7 @@ public class NewContactController implements Initializable {
                     submitResult.setText("Done successfully");
                 }
             } catch (DuplicatePhoneException e) {
+                submitResult.setTextFill(Color.RED);
                 submitResult.setText("Duplicate Phone");
             } catch (SQLException e) {
                 e.printStackTrace();

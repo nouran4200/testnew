@@ -32,7 +32,7 @@ public class RegisterValidation {
 
     public boolean checkPass(String pass) {
         boolean flag = true;
-        if (pass.trim().length() == 0) {
+        if (pass.trim().length() == 0 || pass.length()>15) {
             return false;
         }
         return flag;
