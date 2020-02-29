@@ -31,7 +31,6 @@ public class Main extends Application {
        // System.setProperty("java.rmi.server.hostname", "10.145.7.155");
 
         try {
-
             registry = LocateRegistry.createRegistry(4000);
             chatRoomService = ChatRoomServiceProvider.getInstance();
             sessionService = SessionServiceProvider.getInstance();

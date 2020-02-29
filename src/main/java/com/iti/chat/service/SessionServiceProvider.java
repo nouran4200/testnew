@@ -100,9 +100,6 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         User user = userDAO.login(phone, password);
         if (user != null) {
             //login process
-            if(onlineUsers.containsKey(user.getId())) {
-                return null;
-            }
             onlineUsers.put(user.getId() , user);
             managedSessions.put(user, client);
             for(User friend : user.getFriends()) {

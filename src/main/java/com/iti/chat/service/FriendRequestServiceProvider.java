@@ -41,7 +41,7 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
         }
         ClientService receiverClient = ssp.getClient(receiver);
         if(receiverClient != null) {
-            receiverClient.receiveNotification(new Notification(receiver, sender, NotificationType.FRIENDSHIP_REQUEST_RECEIVED));
+            receiverClient.receiveNotification(new Notification(sender, receiver, NotificationType.FRIENDSHIP_REQUEST_RECEIVED));
         }
 
         //client.receiveNotification(new Notification(client.getUser(),receiver,NotificationType.FRIENDSHIP_REQUEST_RECEIVED));
@@ -59,7 +59,7 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
         ssp.userInfoDidChange(sender);
         ClientService senderClient = ssp.getClient(sender);
         if(senderClient != null) {
-            senderClient.receiveNotification(new Notification(sender, receiver, NotificationType.FRIENDSHIP_ACCEPTED));
+            senderClient.receiveNotification(new Notification(receiver, sender, NotificationType.FRIENDSHIP_ACCEPTED));
         }
         //client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_ACCEPTED));
 
@@ -72,7 +72,7 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
         ClientService senderClient = ssp.getClient(sender);
         User receiver = client.getUser();
         if(senderClient != null) {
-            senderClient.receiveNotification(new Notification(sender, receiver, NotificationType.FRIENDSHIP_ACCEPTED));
+            senderClient.receiveNotification(new Notification(receiver, sender, NotificationType.FRIENDSHIP_ACCEPTED));
         }
         //client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_REJECTED));
 
