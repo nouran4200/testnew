@@ -1,17 +1,13 @@
-package com.iti.chat.dao;
+package com.iti.chat.dao.impl;
 
+import com.iti.chat.dao.NotificationDAO;
 import com.iti.chat.model.Notification;
-import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
 import com.iti.chat.service.DBConnection;
-import com.iti.chat.util.StringUtil;
-import com.iti.chat.util.adapter.UserAdapter;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class NotificationDAOImpl implements NotificationDAO {
     private static NotificationDAOImpl instance;

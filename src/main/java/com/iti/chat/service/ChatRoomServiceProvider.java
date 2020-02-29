@@ -6,7 +6,7 @@ import com.google.code.chatterbotapi.ChatterBotSession;
 import com.google.code.chatterbotapi.ChatterBotType;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.iti.chat.model.*;
-import com.iti.chat.util.Encryption;
+import com.iti.chat.util.security.Encryption;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

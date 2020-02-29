@@ -67,7 +67,7 @@ public class Main extends Application {
 
         });
 
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/home.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/home/home.fxml"));
         stage.setScene(new Scene(root, 900, 700));
         stage.show();
     }

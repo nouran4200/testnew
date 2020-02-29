@@ -1,7 +1,7 @@
 package com.iti.chat.delegate;
 
 import com.iti.chat.dao.UserDAO;
-import com.iti.chat.dao.UserDAOImpl;
+import com.iti.chat.dao.impl.UserDAOImpl;
 import com.iti.chat.model.User;
 
 import java.sql.SQLException;

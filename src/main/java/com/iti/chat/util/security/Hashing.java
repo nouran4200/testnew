@@ -1,4 +1,4 @@
-package com.iti.chat.util;
+package com.iti.chat.util.security;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

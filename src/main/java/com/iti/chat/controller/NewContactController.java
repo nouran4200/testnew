@@ -4,7 +4,7 @@ import com.iti.chat.delegate.RegiseterDelegate;
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.Gender;
 import com.iti.chat.model.User;
-import com.iti.chat.util.Hashing;
+import com.iti.chat.util.security.Hashing;
 import com.iti.chat.util.RegisterValidation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

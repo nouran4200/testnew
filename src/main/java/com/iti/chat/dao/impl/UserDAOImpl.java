@@ -1,5 +1,7 @@
-package com.iti.chat.dao;
+package com.iti.chat.dao.impl;
 
+import com.iti.chat.dao.FriendRequestDAO;
+import com.iti.chat.dao.UserDAO;
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.User;
 import com.iti.chat.model.UserStatus;
