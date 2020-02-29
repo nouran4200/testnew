@@ -1,4 +1,4 @@
-CREATE DATABASE chatty;
+ CREATE DATABASE chatty;
 USE chatty;
 CREATE TABLE users(
 	user_id INT primary key auto_increment,
@@ -6,11 +6,13 @@ CREATE TABLE users(
 	last_name varchar(30) not null,
 	email varchar(30) not null DEFAULT 'user@mail.com',
     gender int not null,
-    country varchar(20) not null default 'Egypt',
+    country varchar(30) not null default 'Egypt',
     password varchar(120) not null,
 	phone varchar(15) unique not null,
 	image_uri varchar(100),
-	bio varchar(250) DEFAULT 'Bio.....'
+	bio varchar(250) DEFAULT 'Bio.....',
+	birthDate varchar(60),
+    isServer int not null
 );
 
 CREATE TABLE friend_requests(

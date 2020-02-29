@@ -1,9 +1,11 @@
 package com.iti.chat.util.adapter;
 
 import com.iti.chat.model.User;
+import com.mysql.cj.jdbc.jmx.LoadBalanceConnectionGroupManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class UserAdapter {
             int gender = resultSet.getInt("gender");
             String country = resultSet.getString("country");
             String url = resultSet.getString("image_uri");
+            String bio = resultSet.getString("bio");
+            String birthDate = resultSet.getString("birthDate");
             User user = new User();
             user.setCountry(country);
             user.setEmail(email);
@@ -27,6 +31,9 @@ public class UserAdapter {
             user.setId(id);
             user.setGender(gender);
             user.setRemoteImagePath(url);
+            user.setBio(bio);
+            if(birthDate!=null)
+                user.setBirthDate(LocalDate.parse(birthDate));
             return user;
         }
         return null;

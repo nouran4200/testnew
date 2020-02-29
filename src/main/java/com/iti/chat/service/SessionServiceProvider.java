@@ -42,6 +42,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         return managedSessions.get(onlineUsers.get(user.getId()));
     }
 
+    public User getUser(int userId) {
+        return onlineUsers.get(userId);
+    }
+
     private void setUser(User user) throws RemoteException, NotBoundException {
         ClientService clientService = managedSessions.remove(onlineUsers.get(user.getId()));
         clientService.setUser(user);
@@ -63,8 +67,10 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
             userDAO.updateInfo(user);
             setUser(user);
             userInfoDidChange(user);
-            Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
+           /* Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
             notifyUsersFriends(notification);
+      */
+
             changeStatus=true;
         } catch (SQLException | NotBoundException e) {
             e.printStackTrace();
@@ -83,6 +89,7 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public User login(String phone, String password, ClientService client) throws SQLException, RemoteException, NotBoundException {
+
         UserDAO userDAO = UserDAOImpl.getInstance();
         User user = userDAO.login(phone, password);
         if (user != null) {
@@ -130,10 +137,11 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public void logout(User user) {
-        managedSessions.remove(user);
+
         user.setStatus(UserStatus.OFFLINE);
         userInfoDidChange(user);
-       // notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
+        managedSessions.remove(onlineUsers.remove(user.getId()));
+        notifyUsersFriends(new Notification(user,null,NotificationType.STATUS_UPDATE));
     }
 
     public void register(User user, String password) throws SQLException, RemoteException {
@@ -156,7 +164,30 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
 
     @Override
     public void userInfoDidChange(User user) {
+        try {
+            ChatRoomServiceProvider.getInstance().userInfoChanged(user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         broadCastChange(user);
+    }
+
+    @Override
+    public void updateStatus(User user) throws RemoteException{
+        UserDAO userDAO = UserDAOImpl.getInstance();
+        System.out.println("update Info"+user);
+        try {
+            userDAO.updateInfo(user);
+            setUser(user);
+            userInfoDidChange(user);
+            Notification notification = new Notification(user, null, NotificationType.STATUS_UPDATE);
+            notifyUsersFriends(notification);
+
+
+            changeStatus=true;
+        } catch (SQLException | NotBoundException e ) {
+            e.printStackTrace();
+        }
     }
 
 

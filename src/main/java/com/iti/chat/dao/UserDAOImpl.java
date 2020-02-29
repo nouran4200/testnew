@@ -46,22 +46,33 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateInfo(User user) {
+        Connection connection = null;
         try {
-            Connection connection = DBConnection.getInstance().getConnection();
+            connection = DBConnection.getInstance().getConnection();
             String updateQuery = "UPDATE chatty.users " +
                     "SET first_name = '" + user.getFirstName() + "', last_name = '" + user.getLastName()
-                    + "' , phone = '" + user.getPhone() + "', email = '" + user.getPhone() +
-                    "', country = '" + user.getCountry() +
+                    + "' , phone = '" + user.getPhone() + "', email = '" + user.getEmail() +
+                    "', country = '" + user.getCountry() + "', bio = '" + user.getBio() +
+                    "', birthDate = '" + user.getBirthDate() +
                     "' where user_id = " + user.getId();
             //System.out.println(updateQuery);
             Statement statement = connection.createStatement();
             statement.execute(updateQuery);
             //statement.executeUpdate(updateQuery);
-            DBConnection.getInstance().closeConnection(connection);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
 
+        }
+        finally {
+            if(connection!=null) {
+                try {
+                    DBConnection.getInstance().closeConnection(connection);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -120,7 +131,8 @@ public class UserDAOImpl implements UserDAO {
         }
 
     }
-    public User findUserById(int id)  throws SQLException{
+
+    public User findUserById(int id) throws SQLException {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             String query = "select * from users where user_id = " + id;
@@ -158,8 +170,8 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User register(User user, String password) throws SQLException {
         if (findUserByPhone(user.getPhone()) == null) {
-            String query = "insert into users (first_name, last_name, email, password, phone, gender, country)" +
-                    " values (?, ?, ?, ?, ?, ?, ?)";
+            String query = "insert into users (first_name, last_name, email, password, phone, gender, country,birthDate ,isServer)" +
+                    " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try {
                 Connection connection = DBConnection.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -170,11 +182,12 @@ public class UserDAOImpl implements UserDAO {
                 preparedStatement.setString(5, user.getPhone());
                 preparedStatement.setInt(6, user.getGender());
                 preparedStatement.setString(7, user.getCountry());
+                preparedStatement.setString(8, user.getBirthDate().toString());
+                preparedStatement.setInt(9, user.getIsAddedFromServer());
                 preparedStatement.executeUpdate();
                 ResultSet tableKeys = preparedStatement.getGeneratedKeys();
                 tableKeys.next();
                 user.setId(tableKeys.getInt(1));
-                System.out.println(user.getId());
                 DBConnection.getInstance().closeConnection(connection);
                 return user;
             } catch (SQLException e) {
@@ -211,7 +224,7 @@ public class UserDAOImpl implements UserDAO {
         searchQuery = StringUtil.addSingleQuotes(searchQuery);
         try {
             Connection connection = DBConnection.getInstance().getConnection();
-            String phoneQuery = "select * from users where phone like " + searchQuery ;
+            String phoneQuery = "select * from users where phone like " + searchQuery;
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(phoneQuery);
             List<User> users = UserAdapter.createUsers(resultSet);
