@@ -41,7 +41,7 @@
         <StackPane alignment="CENTER" maxHeight="300" GridPane.rowIndex="1">
             <HBox id="messageAreaPane" fx:id="messageAreaPane" maxWidth="500">
                 <children>
-                    <TextArea id="msgTxtField" fx:id="msgTxtField" promptText="Type your message ... " wrapText="true">
+                    <TextArea id="msgTxtField" fx:id="msgTxtField" promptText="Type your message ... " wrapText="true" prefHeight="150">
                         <font>
                             <Font name="Arial" size="14.0" />
                         </font>

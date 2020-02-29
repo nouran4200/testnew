@@ -203,7 +203,9 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     private void broadCastChange(User user) {
         System.out.printf("broadcasting user data change " + user);
         try {
-            getClient(user).userInfoDidChange(user);
+            if(getClient(user) != null) {
+                getClient(user).userInfoDidChange(user);
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
