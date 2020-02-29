@@ -100,9 +100,6 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
         User user = userDAO.login(phone, password);
         if (user != null) {
             //login process
-            if(onlineUsers.containsKey(user.getId())) {
-                return null;
-            }
             onlineUsers.put(user.getId() , user);
             managedSessions.put(user, client);
             for(User friend : user.getFriends()) {
@@ -206,7 +203,9 @@ public class SessionServiceProvider extends UnicastRemoteObject implements Sessi
     private void broadCastChange(User user) {
         System.out.printf("broadcasting user data change " + user);
         try {
-            getClient(user).userInfoDidChange(user);
+            if(getClient(user) != null) {
+                getClient(user).userInfoDidChange(user);
+            }
         } catch (RemoteException e) {
             e.printStackTrace();
         }
