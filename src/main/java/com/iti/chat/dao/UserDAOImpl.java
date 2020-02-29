@@ -171,8 +171,8 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User register(User user, String password) throws SQLException {
         if (findUserByPhone(user.getPhone()) == null) {
-            String query = "insert into users (first_name, last_name, email, password, phone, gender, country,birthDate ,isServer)" +
-                    " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "insert into users (first_name, last_name, email, password, phone, gender, country ,isServer)" +
+                    " values (?, ?, ?, ?, ?, ?, ?, ?)";
             try {
                 Connection connection = DBConnection.getInstance().getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -183,11 +183,7 @@ public class UserDAOImpl implements UserDAO {
                 preparedStatement.setString(5, user.getPhone());
                 preparedStatement.setInt(6, user.getGender());
                 preparedStatement.setString(7, user.getCountry());
-                if(user.getBirthDate() != null)
-                    preparedStatement.setString(8, user.getBirthDate().toString());
-                else
-                    preparedStatement.setString(8, null);
-                preparedStatement.setInt(9, user.getIsAddedFromServer());
+                preparedStatement.setInt(8, user.getIsAddedFromServer());
                 preparedStatement.executeUpdate();
                 ResultSet tableKeys = preparedStatement.getGeneratedKeys();
                 tableKeys.next();

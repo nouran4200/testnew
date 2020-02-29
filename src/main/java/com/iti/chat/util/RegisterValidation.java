@@ -24,7 +24,7 @@ public class RegisterValidation {
 
     public boolean checkName(String name) {
         boolean flag = true;
-        if (name.trim().length() == 0 || !name.matches("([a-zA-Z]*)")) {
+        if (!name.matches("(^[a-zA-Z]{2,20}$)")) {
             flag = false;
         }
         return flag;
