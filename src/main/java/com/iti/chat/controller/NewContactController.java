@@ -4,6 +4,7 @@ import com.iti.chat.delegate.RegiseterDelegate;
 import com.iti.chat.exception.DuplicatePhoneException;
 import com.iti.chat.model.Gender;
 import com.iti.chat.model.User;
+import com.iti.chat.util.Hashing;
 import com.iti.chat.util.RegisterValidation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -115,7 +116,7 @@ public class NewContactController implements Initializable {
             passwordError.setText("");
             confirmPasswordError.setText("");
 
-            String defaultEmail = "newUser@email.com";
+            String defaultEmail = "";
             String defaultCountry = "Egypt";
             User user = new User(firstNameTextField.getText(),
                     lastNameTextField.getText(),
@@ -123,9 +124,10 @@ public class NewContactController implements Initializable {
                     defaultEmail,
                     gender,
                     defaultCountry);
+            user.setIsAddedFromServer(1);
             RegiseterDelegate regiseterDelegate = new RegiseterDelegate();
             try {
-                User submittedUser = regiseterDelegate.register(user, passwordTextField.getText());
+                User submittedUser = regiseterDelegate.register(user, Hashing.getSecurePassword(passwordTextField.getText()));
                 if (submittedUser != null) {
                     submitResult.setText("Done successfully");
                 }
