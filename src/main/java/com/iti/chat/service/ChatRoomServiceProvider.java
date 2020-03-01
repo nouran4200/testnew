@@ -184,7 +184,9 @@ public class ChatRoomServiceProvider extends UnicastRemoteObject implements Chat
                         message.setContent(chatterBotSession.think(lastMessage.getContent()));
                         room.getMessages().add(message);
                         message.setChatRoom(room);
+                        message.setContent(Encryption.encrypt(message.getContent()));
                         broadcast(message, room, true);
+                        message.setContent(Encryption.decrypt(message.getContent()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
