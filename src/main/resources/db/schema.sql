@@ -11,7 +11,7 @@ CREATE TABLE users(
 	phone varchar(15) unique not null,
 	image_uri varchar(100),
 	bio varchar(250) DEFAULT 'Bio.....',
-	birthDate varchar(60),
+	birthDate varchar(60) DEFAULT "1993-07-03",
     isServer int not null
 );
 
