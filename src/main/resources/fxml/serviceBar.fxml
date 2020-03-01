@@ -6,7 +6,7 @@
 
 <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="209.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXToggleButton fx:id="ServiceAction" text="Service Status">
+      <JFXToggleButton text="Service Status">
          <font>
             <Font name="Arial Bold" size="18.0" />
          </font>

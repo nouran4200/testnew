@@ -1,46 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.*?>
+<?import java.net.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import java.net.URL?>
-<?import com.jfoenix.controls.JFXToggleButton?>
-<HBox alignment="TOP_CENTER" fillHeight="false" prefHeight="50.0" spacing="20.0" BorderPane.alignment="CENTER"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AdminbarController">
+<HBox alignment="TOP_CENTER" fillHeight="false" prefHeight="50.0" spacing="20.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iti.chat.controller.AdminbarController">
 
     <children>
 
-        <JFXToggleButton text="Service" alignment="TOP_CENTER" fx:id="serviceButton" styleClass="toggleButton">
+        <JFXToggleButton fx:id="serviceButton" alignment="TOP_CENTER" onAction="#manageService" styleClass="toggleButton" text="Service">
         </JFXToggleButton>
-        <JFXButton text="Statistics" styleClass="menuButton" prefHeight="60" fx:id="StatsButton">
+        <JFXButton fx:id="StatsButton" prefHeight="60" styleClass="menuButton" text="Statistics">
             <graphic>
                 <ImageView fitHeight="40" fitWidth="40">
-                    <Image url="@../images/icons8-statistics-64.png"/>
+                    <Image url="@../images/icons8-statistics-64.png" />
                 </ImageView>
             </graphic>
         </JFXButton>
-        <JFXButton text="Announcement" styleClass="menuButton" prefHeight="60" fx:id="announceButton">
+        <JFXButton fx:id="announceButton" prefHeight="60" styleClass="menuButton" text="Announcement">
             <graphic>
                 <ImageView fitHeight="40" fitWidth="40">
-                    <Image url="@../images/icons8-commercial-64.png"/>
+                    <Image url="@../images/icons8-commercial-64.png" />
                 </ImageView>
             </graphic>
         </JFXButton>
-        <JFXButton text="Add Contact" styleClass="menuButton" prefHeight="60" fx:id="addContactButton">
+        <JFXButton fx:id="addContactButton" prefHeight="60" styleClass="menuButton" text="Add Contact">
             <graphic>
                 <ImageView fitHeight="35" fitWidth="35">
-                    <Image url="@../images/icons8-new-contact-40.png"/>
+                    <Image url="@../images/icons8-new-contact-40.png" />
                 </ImageView>
             </graphic>
         </JFXButton>
-        <JFXButton text="CrudSystem" styleClass="menuButton" prefHeight="60" fx:id="crudButton">
+        <JFXButton fx:id="crudButton" prefHeight="60" styleClass="menuButton" text="CrudSystem">
             <graphic>
                 <ImageView fitHeight="40" fitWidth="40">
-                    <Image url="@../images/icons8-statistics-64.png"/>
+                    <Image url="@../images/icons8-statistics-64.png" />
                 </ImageView>
             </graphic>
         </JFXButton>
@@ -48,7 +43,7 @@
 
 
     <stylesheets>
-        <URL value="@../css/styleSheet.css"></URL>
-        <URL value="@../css/charts.css"></URL>
+        <URL value="@../css/styleSheet.css" />
+        <URL value="@../css/charts.css" />
     </stylesheets>
 </HBox>
