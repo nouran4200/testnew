@@ -1,9 +1,9 @@
 package com.iti.chat.service;
 
 import com.iti.chat.dao.FriendRequestDAO;
-import com.iti.chat.dao.FriendRequestDAOImpl;
+import com.iti.chat.dao.impl.FriendRequestDAOImpl;
 import com.iti.chat.dao.UserDAO;
-import com.iti.chat.dao.UserDAOImpl;
+import com.iti.chat.dao.impl.UserDAOImpl;
 import com.iti.chat.model.Notification;
 import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;
@@ -72,7 +72,7 @@ public class FriendRequestServiceProvider extends UnicastRemoteObject implements
         ClientService senderClient = ssp.getClient(sender);
         User receiver = client.getUser();
         if(senderClient != null) {
-            senderClient.receiveNotification(new Notification(receiver, sender, NotificationType.FRIENDSHIP_ACCEPTED));
+            senderClient.receiveNotification(new Notification(receiver, sender, NotificationType.FRIENDSHIP_REJECTED));
         }
         //client.receiveNotification(new Notification(client.getUser(),sender,NotificationType.FRIENDSHIP_REJECTED));
 

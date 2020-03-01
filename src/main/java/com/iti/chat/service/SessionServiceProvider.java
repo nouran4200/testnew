@@ -2,7 +2,7 @@ package com.iti.chat.service;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
 import com.iti.chat.dao.UserDAO;
-import com.iti.chat.dao.UserDAOImpl;
+import com.iti.chat.dao.impl.UserDAOImpl;
 import com.iti.chat.model.Notification;
 import com.iti.chat.model.NotificationType;
 import com.iti.chat.model.User;

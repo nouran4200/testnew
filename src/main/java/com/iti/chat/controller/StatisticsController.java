@@ -1,6 +1,6 @@
 package com.iti.chat.controller;
 
-import com.iti.chat.dao.StatisticsDAOImpl;
+import com.iti.chat.dao.impl.StatisticsDAOImpl;
 import com.iti.chat.model.Gender;
 import com.iti.chat.service.SessionServiceProvider;
 import com.jfoenix.controls.JFXButton;

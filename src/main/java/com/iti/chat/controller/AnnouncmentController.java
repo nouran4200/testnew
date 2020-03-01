@@ -7,10 +7,9 @@ package com.iti.chat.controller;
 
 import com.iti.chat.model.Message;
 import com.iti.chat.model.MessageStyle;
-import com.iti.chat.model.Notification;
 import com.iti.chat.service.SessionServiceProvider;
 import com.iti.chat.util.ColorUtils;
-import com.iti.chat.util.Encryption;
+import com.iti.chat.util.security.Encryption;
 import com.jfoenix.controls.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

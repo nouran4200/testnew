@@ -13,9 +13,9 @@
 
     </center>
     <stylesheets>
-        <URL value="@../css/styleSheet.css"></URL>
-        <URL value="@../css/charts.css"></URL>
-        <URL value="@../css/announcement.css"></URL>
+        <URL value="@../../css/styleSheet.css"></URL>
+        <URL value="@../../css/charts.css"></URL>
+        <URL value="@../../css/announcement.css"></URL>
     </stylesheets>
 
 </BorderPane>

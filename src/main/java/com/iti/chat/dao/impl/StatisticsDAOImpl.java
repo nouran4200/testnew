@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.iti.chat.dao;
+package com.iti.chat.dao.impl;
 
+import com.iti.chat.dao.StatisticsDAO;
 import com.iti.chat.service.DBConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;

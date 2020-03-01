@@ -19,28 +19,28 @@
         <JFXButton text="Statistics" styleClass="menuButton" prefHeight="60" fx:id="StatsButton">
             <graphic>
                 <ImageView fitHeight="40" fitWidth="40">
-                    <Image url="@../images/icons8-statistics-64.png"/>
+                    <Image url="@../../images/icons8-statistics-64.png"/>
                 </ImageView>
             </graphic>
         </JFXButton>
         <JFXButton text="Announcement" styleClass="menuButton" prefHeight="60" fx:id="announceButton">
             <graphic>
                 <ImageView fitHeight="40" fitWidth="40">
-                    <Image url="@../images/icons8-commercial-64.png"/>
+                    <Image url="@../../images/icons8-commercial-64.png"/>
                 </ImageView>
             </graphic>
         </JFXButton>
         <JFXButton text="Add Contact" styleClass="menuButton" prefHeight="60" fx:id="addContactButton">
             <graphic>
                 <ImageView fitHeight="35" fitWidth="35">
-                    <Image url="@../images/icons8-new-contact-40.png"/>
+                    <Image url="@../../images/icons8-new-contact-40.png"/>
                 </ImageView>
             </graphic>
         </JFXButton>
         <JFXButton text="Data" styleClass="menuButton" prefHeight="60" fx:id="crudButton">
             <graphic>
                 <ImageView fitHeight="40" fitWidth="40">
-                    <Image url="@../images/icons8-statistics-64.png"/>
+                    <Image url="@../../images/icons8-statistics-64.png"/>
                 </ImageView>
             </graphic>
         </JFXButton>
@@ -48,7 +48,7 @@
 
 
     <stylesheets>
-        <URL value="@../css/styleSheet.css"></URL>
-        <URL value="@../css/charts.css"></URL>
+        <URL value="@../../css/styleSheet.css"></URL>
+        <URL value="@../../css/charts.css"></URL>
     </stylesheets>
 </HBox>
