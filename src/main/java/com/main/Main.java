@@ -58,6 +58,7 @@ public class Main extends Application {
                 UnicastRemoteObject.unexportObject(sessionService, false);
                 UnicastRemoteObject.unexportObject(friendRequestsService, false);
                 UnicastRemoteObject.unexportObject(fileTransferService, false);
+                System.exit(0);
 
             } catch (RemoteException e) {
                 e.printStackTrace();
